@@ -55,10 +55,11 @@ src/
     ui/                 ← generic primitives (Button, Badge, Card, Modal, Field)
     layout/             ← Shell, Sidebar, TopBar, PersonaSwitcher, icons
     promotion/          ← promotion-specific, reused across screens:
-                          PromotionForm, PromotionStepper, ExperiencePanel,
-                          EvaluationsPanel, LicencesPanel, EmailPreview, …
+                          PromotionForm, PromotionReviewModal, PromotionStepper,
+                          ProfileSummary, ExperiencePanel, EvaluationsPanel,
+                          LicencesPanel, EmailPreview, …
   pages/                ← one file per route (CrewDirectory, SeafarerProfile,
-                          PromotionReview, Assignments, StubPage)
+                          Assignments, StubPage)
   App.tsx               ← routes
 ```
 
@@ -82,6 +83,13 @@ hex — so a re-skin is a one-file change.
 
 ## Conventions
 
+- The promotion flow is **modal-driven**: initiating (`PromotionForm`) and approving
+  (`PromotionReviewModal`) are modals over the existing UI. The decision-support panels
+  (experience / evaluations / licences) appear **only** in those modals — the profile
+  Summary tab (`ProfileSummary`) shows the workflow card plus normal crew summary, never
+  the decision-support panels.
+- OOS chrome is navy (`bg-navy`, sidebar + top bar); all primary calls-to-action use the
+  action-blue token (`bg-teal`, see `src/index.css`).
 - Prototype-only affordances (the persona switcher, "Reset demo", the "Prototype"
   badge) are clearly marked as such in code comments — they are not product features.
 - State is in-memory only; a refresh resets the demo. That is intentional.

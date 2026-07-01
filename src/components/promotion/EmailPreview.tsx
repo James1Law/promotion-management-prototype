@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import type { PromotionRequest, Seafarer } from '../../data/types';
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
@@ -14,13 +13,14 @@ export function EmailPreview({
   request,
   open,
   onClose,
+  onOpenReview,
 }: {
   seafarer: Seafarer;
   request: PromotionRequest;
   open: boolean;
   onClose: () => void;
+  onOpenReview: () => void;
 }) {
-  const navigate = useNavigate();
   const current = request.stages.find((s) => s.status === 'current');
   if (!current) return null;
 
@@ -56,12 +56,7 @@ export function EmailPreview({
           )}
           <p>Open the request in OpenOcean Studio to review the details and record your decision.</p>
           <div className="pt-1">
-            <Button
-              onClick={() => {
-                onClose();
-                navigate(`/seafarer/${seafarer.id}/promotion`);
-              }}
-            >
+            <Button onClick={onOpenReview}>
               Open promotion <IconArrowRight width={15} height={15} />
             </Button>
           </div>

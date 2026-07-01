@@ -16,17 +16,17 @@ export function PersonaSwitcher() {
     <div className="relative">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-2 rounded-md border border-line bg-white px-2.5 py-1.5 text-sm hover:bg-canvas"
+        className="flex items-center gap-2 rounded-md border border-white/15 bg-white/10 px-2.5 py-1.5 text-sm hover:bg-white/15"
         title="Switch role (prototype only)"
       >
-        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-soft text-teal-dark">
+        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white">
           <IconUser width={14} height={14} />
         </span>
         <span className="hidden text-left leading-tight sm:block">
-          <span className="block text-[13px] font-medium text-ink">{current.name}</span>
-          <span className="block text-[11px] text-muted">{current.jobTitle}</span>
+          <span className="block text-[13px] font-medium text-white">{current.name}</span>
+          <span className="block text-[11px] text-white/70">{current.jobTitle}</span>
         </span>
-        <IconChevron width={14} height={14} className="text-faint" />
+        <IconChevron width={14} height={14} className="text-white/70" />
       </button>
 
       {open && (

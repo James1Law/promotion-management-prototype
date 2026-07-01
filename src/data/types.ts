@@ -69,6 +69,10 @@ export interface Seafarer {
   vesselType: VesselType;
   nationality: string;
   manningAgent: string;
+  dateOfBirth?: string; // ISO
+  gender?: string;
+  homeAirport?: string;
+  nextAssignment?: string;
   joiningDate?: string; // ISO
   seniorityDate?: string; // ISO
   experience: Experience;

@@ -28,8 +28,10 @@ notified by email (simulated) and can **approve / reject / pause / skip**.
 
 ![Approval workflow — pending](docs/screenshots/03-workflow-pending.png)
 
-Each approver opens the request and sees exactly what the initiator saw — experience,
-evaluations, licences, remarks and attachments — before recording a decision.
+Each approver opens the request in a **modal over the profile** and — only at this point —
+sees the decision-support panels the initiator saw (experience, evaluations, licences,
+remarks and attachments) before recording a decision. Until then the profile shows just
+the workflow card and the normal summary.
 
 ![Approver review](docs/screenshots/04-approver-review.png)
 

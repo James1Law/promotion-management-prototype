@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { seafarerById } from '../data/seafarers';
 import { usePromotionStore, useCurrentPersona, effectiveRank } from '../store/promotionStore';
 import { Shell } from '../components/layout/Shell';
@@ -9,12 +9,11 @@ import { Badge } from '../components/ui/Badge';
 import { Modal } from '../components/ui/Modal';
 import { FormLabel } from '../components/ui/Field';
 import { Avatar } from '../components/promotion/Avatar';
-import { ExperiencePanel } from '../components/promotion/ExperiencePanel';
-import { EvaluationsPanel } from '../components/promotion/EvaluationsPanel';
-import { LicencesPanel } from '../components/promotion/LicencesPanel';
+import { ProfileSummary } from '../components/promotion/ProfileSummary';
 import { PromotionStepper } from '../components/promotion/PromotionStepper';
 import { PromotionStatusBadge } from '../components/promotion/PromotionStatusBadge';
 import { PromotionForm } from '../components/promotion/PromotionForm';
+import { PromotionReviewModal } from '../components/promotion/PromotionReviewModal';
 import { EmailPreview } from '../components/promotion/EmailPreview';
 import { IconArrowRight, IconMail, IconExternal, IconPaperclip } from '../components/layout/icons';
 import { formatDate } from '../lib/format';
@@ -23,7 +22,6 @@ const TABS = ['Summary', 'Personal', 'Contracts', 'Documents', 'Training', 'Eval
 
 export function SeafarerProfilePage() {
   const { id = '' } = useParams();
-  const navigate = useNavigate();
   const seafarer = seafarerById(id);
   const request = usePromotionStore((s) => s.requests[id]);
   const resetPromotion = usePromotionStore((s) => s.resetPromotion);
@@ -32,6 +30,7 @@ export function SeafarerProfilePage() {
 
   const [formOpen, setFormOpen] = useState(false);
   const [emailOpen, setEmailOpen] = useState(false);
+  const [reviewOpen, setReviewOpen] = useState(false);
   const [applyOpen, setApplyOpen] = useState(false);
   const [effectiveDate, setEffectiveDate] = useState(new Date().toISOString().slice(0, 10));
 
@@ -144,10 +143,7 @@ export function SeafarerProfilePage() {
                     <Button variant="secondary" size="sm" onClick={() => setEmailOpen(true)}>
                       <IconMail width={14} height={14} /> View email
                     </Button>
-                    <Button
-                      size="sm"
-                      onClick={() => navigate(`/seafarer/${seafarer.id}/promotion`)}
-                    >
+                    <Button size="sm" onClick={() => setReviewOpen(true)}>
                       {isCurrentApprover ? 'Review & decide' : 'Open promotion'}{' '}
                       <IconArrowRight width={14} height={14} />
                     </Button>
@@ -214,14 +210,10 @@ export function SeafarerProfilePage() {
           </Card>
         )}
 
-        {/* Decision-support (Summary tab) */}
-        <div className="space-y-4">
-          <ExperiencePanel seafarer={seafarer} />
-          <div className="grid gap-4 lg:grid-cols-2">
-            <EvaluationsPanel seafarer={seafarer} />
-            <LicencesPanel seafarer={seafarer} />
-          </div>
-        </div>
+        {/* Summary tab content (crew details / service summary / documents).
+            The promotion decision-support panels are NOT here — they appear
+            only in the review modal. */}
+        <ProfileSummary seafarer={seafarer} rank={rank} />
       </div>
 
       {/* Modals */}
@@ -232,6 +224,18 @@ export function SeafarerProfilePage() {
           request={request}
           open={emailOpen}
           onClose={() => setEmailOpen(false)}
+          onOpenReview={() => {
+            setEmailOpen(false);
+            setReviewOpen(true);
+          }}
+        />
+      )}
+      {request && (
+        <PromotionReviewModal
+          seafarer={seafarer}
+          request={request}
+          open={reviewOpen}
+          onClose={() => setReviewOpen(false)}
         />
       )}
       <Modal

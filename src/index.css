@@ -12,9 +12,11 @@
   --color-navy-deep: #0d2032; /* sidebar hover / active bg */
   --color-navy-accent: #2f8fd6; /* active nav marker, current workflow step */
 
-  --color-teal: #12a3a0; /* primary action */
-  --color-teal-dark: #0e8785;
-  --color-teal-soft: #e2f5f4; /* soft teal backgrounds / pills */
+  /* OOS action blue. Token is named 'teal' for historical reasons but now holds
+     the blue used for all primary calls-to-action and links. */
+  --color-teal: #1b78c9; /* primary action */
+  --color-teal-dark: #135fa3;
+  --color-teal-soft: #e7f0fb; /* soft blue backgrounds / pills */
 
   /* Neutrals */
   --color-ink: #1f2d3d; /* primary text */

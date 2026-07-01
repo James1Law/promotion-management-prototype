@@ -17,6 +17,10 @@ export const SEAFARERS: Seafarer[] = [
     vesselType: 'TANKER',
     nationality: 'Norwegian',
     manningAgent: 'Zodiac Maritime',
+    dateOfBirth: '1989-04-14',
+    gender: 'Male',
+    homeAirport: 'OSL — Oslo',
+    nextAssignment: 'MT Nordic Star (Tanker)',
     joiningDate: '2025-11-18',
     seniorityDate: '2021-03-01',
     experience: {
@@ -134,6 +138,10 @@ export const SEAFARERS: Seafarer[] = [
     vesselType: 'CONTAINER',
     nationality: 'Indian',
     manningAgent: 'Zodiac Maritime',
+    dateOfBirth: '1986-11-02',
+    gender: 'Male',
+    homeAirport: 'COK — Kochi',
+    nextAssignment: 'MV Pacific Bridge (Container)',
     joiningDate: '2026-01-08',
     seniorityDate: '2019-07-01',
     experience: {
