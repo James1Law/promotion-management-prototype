@@ -1,0 +1,233 @@
+import type { Seafarer } from './types';
+
+/**
+ * Seed seafarers for the prototype.
+ *
+ * Two contrasting examples so the vessel-type-conditional experience rows are
+ * visible: a tanker deck officer and a container engineer. Add more by
+ * appending to this array — the crew directory and routing pick them up
+ * automatically.
+ */
+export const SEAFARERS: Seafarer[] = [
+  {
+    id: 'sf-halvorsen',
+    name: 'Marcus Halvorsen',
+    crewNumber: '104882',
+    currentRank: { code: '2/O', name: 'Second Officer' },
+    vesselType: 'TANKER',
+    nationality: 'Norwegian',
+    manningAgent: 'Zodiac Maritime',
+    joiningDate: '2025-11-18',
+    seniorityDate: '2021-03-01',
+    experience: {
+      yearsInRank: 3.4,
+      yearsAsOfficer: 6.1,
+      totalSeaTimeYears: 9.2,
+      yearsOnTankers: 5.8,
+      yearsOnContainers: 1.1,
+      yearsOnBulk: 0,
+    },
+    evaluations: [
+      {
+        id: 'ev-h1',
+        date: '2026-04-12',
+        formType: 'Onboard appraisal',
+        score: 92,
+        evaluator: 'Capt. R. Osei',
+        rankHeld: 'Second Officer',
+        vesselType: 'TANKER',
+      },
+      {
+        id: 'ev-h2',
+        date: '2025-10-02',
+        formType: 'Onboard appraisal',
+        score: 88,
+        evaluator: 'Capt. L. Brandt',
+        rankHeld: 'Second Officer',
+        vesselType: 'TANKER',
+      },
+      {
+        id: 'ev-h3',
+        date: '2025-03-20',
+        formType: 'Onboard appraisal',
+        score: 90,
+        evaluator: 'Capt. R. Osei',
+        rankHeld: 'Second Officer',
+        vesselType: 'TANKER',
+      },
+      {
+        id: 'ev-h4',
+        date: '2024-08-11',
+        formType: 'Onboard appraisal',
+        score: 84,
+        evaluator: 'Capt. M. Ferreira',
+        rankHeld: 'Third Officer',
+        vesselType: 'TANKER',
+      },
+    ],
+    documents: [
+      {
+        id: 'doc-h1',
+        name: 'Certificate of Competency — Deck Officer (Management)',
+        category: 'Licence',
+        reference: 'NO-COC-88213',
+        issueDate: '2022-05-01',
+        expiryDate: '2027-05-01',
+        status: 'valid',
+      },
+      {
+        id: 'doc-h2',
+        name: 'GMDSS General Operator Certificate',
+        category: 'Licence',
+        reference: 'GMDSS-55120',
+        issueDate: '2021-02-15',
+        expiryDate: '2026-11-30',
+        status: 'expiring',
+      },
+      {
+        id: 'doc-h3',
+        name: 'Advanced Oil Tanker Training',
+        category: 'Certificate',
+        reference: 'AOT-3391',
+        issueDate: '2023-06-10',
+        expiryDate: '2028-06-10',
+        status: 'valid',
+      },
+      {
+        id: 'doc-h4',
+        name: 'Crude Oil Washing (COW) Certificate',
+        category: 'Certificate',
+        reference: 'COW-1204',
+        issueDate: '2023-06-12',
+        expiryDate: '2028-06-12',
+        status: 'valid',
+      },
+      {
+        id: 'doc-h5',
+        name: 'Ship Security Officer',
+        category: 'Training',
+        status: 'valid',
+        issueDate: '2022-01-20',
+      },
+    ],
+    rankHistory: [
+      {
+        rank: { code: '2/O', name: 'Second Officer' },
+        vesselType: 'TANKER',
+        from: '2023-02-01',
+        reason: 'Promotion',
+      },
+      {
+        rank: { code: '3/O', name: 'Third Officer' },
+        vesselType: 'TANKER',
+        from: '2020-09-01',
+        to: '2023-01-31',
+        reason: 'Promotion',
+      },
+    ],
+  },
+  {
+    id: 'sf-menon',
+    name: 'Rajesh Menon',
+    crewNumber: '103551',
+    currentRank: { code: '2/E', name: 'Second Engineer' },
+    vesselType: 'CONTAINER',
+    nationality: 'Indian',
+    manningAgent: 'Zodiac Maritime',
+    joiningDate: '2026-01-08',
+    seniorityDate: '2019-07-01',
+    experience: {
+      yearsInRank: 2.7,
+      yearsAsOfficer: 8.3,
+      totalSeaTimeYears: 11.5,
+      yearsOnTankers: 0.6,
+      yearsOnContainers: 7.9,
+      yearsOnBulk: 3.0,
+    },
+    evaluations: [
+      {
+        id: 'ev-m1',
+        date: '2026-05-01',
+        formType: 'Onboard appraisal',
+        score: 86,
+        evaluator: 'C/E T. Nakamura',
+        rankHeld: 'Second Engineer',
+        vesselType: 'CONTAINER',
+      },
+      {
+        id: 'ev-m2',
+        date: '2025-11-14',
+        formType: 'Onboard appraisal',
+        score: 79,
+        evaluator: 'C/E P. Andersson',
+        rankHeld: 'Second Engineer',
+        vesselType: 'CONTAINER',
+        flagged: true,
+      },
+      {
+        id: 'ev-m3',
+        date: '2025-04-22',
+        formType: 'Onboard appraisal',
+        score: 83,
+        evaluator: 'C/E T. Nakamura',
+        rankHeld: 'Second Engineer',
+        vesselType: 'CONTAINER',
+      },
+    ],
+    documents: [
+      {
+        id: 'doc-m1',
+        name: 'Certificate of Competency — Engineer Officer (Management)',
+        category: 'Licence',
+        reference: 'IN-COC-44190',
+        issueDate: '2021-09-01',
+        expiryDate: '2026-09-01',
+        status: 'expiring',
+      },
+      {
+        id: 'doc-m2',
+        name: 'Engine Room Resource Management',
+        category: 'Training',
+        reference: 'ERM-7742',
+        issueDate: '2022-03-11',
+        status: 'valid',
+      },
+      {
+        id: 'doc-m3',
+        name: 'High Voltage Safety & Operation',
+        category: 'Certificate',
+        reference: 'HV-2201',
+        issueDate: '2024-02-19',
+        expiryDate: '2029-02-19',
+        status: 'valid',
+      },
+      {
+        id: 'doc-m4',
+        name: 'Refrigerated Container (Reefer) Systems',
+        category: 'Certificate',
+        status: 'expired',
+        issueDate: '2020-05-01',
+        expiryDate: '2025-05-01',
+      },
+    ],
+    rankHistory: [
+      {
+        rank: { code: '2/E', name: 'Second Engineer' },
+        vesselType: 'CONTAINER',
+        from: '2023-10-01',
+        reason: 'Promotion',
+      },
+      {
+        rank: { code: '3/E', name: 'Third Engineer' },
+        vesselType: 'CONTAINER',
+        from: '2020-06-01',
+        to: '2023-09-30',
+        reason: 'Promotion',
+      },
+    ],
+  },
+];
+
+export function seafarerById(id: string): Seafarer | undefined {
+  return SEAFARERS.find((s) => s.id === id);
+}

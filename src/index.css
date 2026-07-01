@@ -1,0 +1,54 @@
+@import 'tailwindcss';
+
+/*
+ * OpenOcean Studio design tokens.
+ * Everything visual keys off these. To restyle the whole prototype,
+ * change values here — components reference the token utilities
+ * (bg-navy, text-teal, border-line, etc.), not raw hex.
+ */
+@theme {
+  /* Brand */
+  --color-navy: #122a3f; /* sidebar */
+  --color-navy-deep: #0d2032; /* sidebar hover / active bg */
+  --color-navy-accent: #2f8fd6; /* active nav marker, current workflow step */
+
+  --color-teal: #12a3a0; /* primary action */
+  --color-teal-dark: #0e8785;
+  --color-teal-soft: #e2f5f4; /* soft teal backgrounds / pills */
+
+  /* Neutrals */
+  --color-ink: #1f2d3d; /* primary text */
+  --color-muted: #6b7a8d; /* secondary text */
+  --color-faint: #9aa7b5; /* tertiary text */
+  --color-line: #e2e8ef; /* borders */
+  --color-canvas: #f4f6f9; /* app background */
+  --color-surface: #ffffff; /* cards */
+
+  /* Status */
+  --color-ok: #2fa36b;
+  --color-ok-soft: #e5f4ec;
+  --color-warn: #d98a1f;
+  --color-warn-soft: #fbf1e0;
+  --color-danger: #d4503e;
+  --color-danger-soft: #fbe9e6;
+  --color-info: #2f8fd6;
+  --color-info-soft: #e6f1fb;
+
+  --radius-card: 8px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family:
+    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
