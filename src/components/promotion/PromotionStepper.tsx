@@ -68,9 +68,9 @@ export function PromotionStepper({ stages }: { stages: ApprovalStageState[] }) {
         const isLast = i === stages.length - 1;
         return (
           <div key={stage.id} className="relative flex flex-1 gap-3 md:flex-col md:gap-0">
-            {/* connector line (desktop) */}
+            {/* connector line (desktop) — centred on the 32px node */}
             {!isLast && (
-              <div className="absolute left-4 top-8 hidden h-0.5 w-full bg-line md:block" />
+              <div className="absolute left-4 top-4 hidden h-0.5 w-full -translate-y-1/2 bg-line md:block" />
             )}
             <div className="flex items-center md:flex-col md:items-start">
               <span
