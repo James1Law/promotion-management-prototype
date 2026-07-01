@@ -10,6 +10,8 @@ an **Approved for Promotion** state → a deliberate **manual** rank change.
 > backend, simulated email, in-memory state (a refresh resets the demo). The
 > "Prototype" badge, the role switcher, and "Reset demo" buttons are demo aids.
 
+**Repo:** <https://github.com/James1Law/promotion-management-prototype>
+
 ---
 
 ## The flow
@@ -17,8 +19,8 @@ an **Approved for Promotion** state → a deliberate **manual** rank change.
 **1 · Initiate** — from the Crew Directory, open a seafarer and click **Promote**. Every
 entry point in OOS opens the *same* form, pre-populated with the decision-support data
 crewing already holds: experience (with vessel-type-conditional rows), recent evaluation
-scores, and licences/documents held — each deep-linking to its existing module. Add
-remarks and an attachment, then submit.
+scores (on the OOS **1–10** scale, e.g. `9.2 / 10`), and licences/documents held — each
+deep-linking to its existing module. Add remarks and an attachment, then submit.
 
 ![Promotion form](docs/screenshots/02-form.png)
 

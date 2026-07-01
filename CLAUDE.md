@@ -63,9 +63,10 @@ src/
   App.tsx               ← routes
 ```
 
-Design tokens (OOS navy/teal palette, radii) live in `@theme` in `src/index.css`.
-Components use token utilities (`bg-navy`, `text-teal`, `border-line`) — never raw
-hex — so a re-skin is a one-file change.
+Design tokens (OOS palette, radii) live in `@theme` in `src/index.css`. Components use
+token utilities (`bg-navy`, `text-teal`, `border-line`) — never raw hex — so a re-skin is
+a one-file change. Note: the token named `teal` holds the OOS **action-blue** (the name is
+kept for utility-class compatibility); the navy is the chrome colour (sidebar + top bar).
 
 ## How to make common changes
 
@@ -75,6 +76,9 @@ hex — so a re-skin is a one-file change.
   field to `Experience` in `types.ts`, a value in each seed seafarer, and a row in
   `EXPERIENCE_ROWS` in `formConfig.ts`. Use `showIf` for vessel-type-conditional rows.
 - **Change how many recent evaluations show** → `RECENT_EVALUATION_COUNT` in `formConfig.ts`.
+- **Change the evaluation scoring scale** → evaluations use a **1–10** scale (10 = excellent),
+  shown as `9.2 / 10` with a qualitative label. Bands and formatting live in `lib/format.ts`
+  (`formatScore`, `scoreLabel`, `scoreTone`); seed values are on `Evaluation.score`.
 - **Add a seafarer** → append to `SEAFARERS` in `seafarers.ts`.
 - **Add a rank transition** → extend `RANKS` / `PROGRESSION` in `ranks.ts`.
 - **Add an entry point** → render `<PromotionForm seafarer=… />` behind a button;
@@ -97,6 +101,14 @@ hex — so a re-skin is a one-file change.
 
 ## Deploy
 
-Static SPA. Push to GitHub and import into Vercel (framework auto-detected as Vite;
-`vercel.json` is present as a fallback with SPA rewrites). Build command
-`npm run build`, output `dist/`.
+Static SPA. Repo: <https://github.com/James1Law/promotion-management-prototype> (`main`).
+Import into Vercel (framework auto-detected as Vite; `vercel.json` is present as a fallback
+with SPA rewrites). Build command `npm run build`, output `dist/`.
+
+## Current state & what's next
+
+The end-to-end flow is built and verified: initiate → 3-step approval (approve / reject /
+pause / skip, persona-gated) → Approved for Promotion → manual rank change, plus a rejection
+path. See **`notes/prototype-prd.md` §9** for the full as-built status, the evolutions since
+the original spec (blue chrome/CTAs, 1–10 eval scores, modal-driven review, summary-only
+profile), and what's deferred. When picking up new work, read §9 first.

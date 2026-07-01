@@ -1,9 +1,13 @@
 # Promotion Management — Prototype PRD
 
-**Status:** Draft for review
+**Status:** Built — prototype delivered (§9 tracks as-built state)
 **Author:** James Law
 **Date:** 2026-07-01
 **Purpose:** Define the scope of a clickable prototype that illustrates the "simple version" of promotion management agreed with Sophie, to be shared ahead of Friday's planning meeting.
+
+> §1–8 record the agreed scope and the decisions behind it (kept as the historical
+> spec). **§9 is the source of truth for what has actually been built** and where the
+> implementation has since evolved beyond the original spec.
 
 ---
 
@@ -105,4 +109,53 @@ Both the **happy path** (through to approved + manual rank change) and the **rej
 
 ---
 
-*Next step after sign-off: build the clickable prototype (HTML/React), OOS-styled, covering the screens in §5.*
+## 9. Implementation Status (as built)
+
+The prototype is built and deployed. Stack: **Vite + React 18 + TypeScript + Tailwind
+CSS v4 + react-router (HashRouter) + zustand**. It is config-driven (see `CLAUDE.md`).
+Repo: <https://github.com/James1Law/promotion-management-prototype> (static SPA, Vercel-ready).
+
+### Delivered
+
+| Area | State | Where |
+|---|---|---|
+| Crew Directory list + two seed seafarers (tanker officer, container engineer) | ✅ | `pages/CrewDirectoryPage`, `data/seafarers.ts` |
+| Promotion **form** (pre-populated: experience, evaluations, licences, remarks, attachment) | ✅ | `components/promotion/PromotionForm` |
+| Unified entry points (Crew Directory + Assignments both open the same form) | ✅ | `pages/CrewDirectoryPage`, `pages/AssignmentsPage` |
+| Vessel-type-conditional experience rows (tankers/containers/bulk) | ✅ | `data/formConfig.ts` (`EXPERIENCE_ROWS`, `showIf`) |
+| 3-step sequential approval workflow (approve / reject / pause / skip) | ✅ | `data/approvalChains.ts`, `store/promotionStore.ts` |
+| Applicant-style **stepper** on the profile (line centred on nodes) | ✅ | `components/promotion/PromotionStepper` |
+| Simulated **email** notification with deep link into the review | ✅ | `components/promotion/EmailPreview` |
+| **Approver review** (decision-support + decision controls) | ✅ | `components/promotion/PromotionReviewModal` |
+| Persona-gated decisions + "Switch to …" shortcut | ✅ | review modal + `PersonaSwitcher` |
+| **Approved for promotion** state + deliberate **manual rank change** | ✅ | `SeafarerProfilePage` (apply-rank-change modal) |
+| **Rejection path** (reason captured, workflow halted, shown on profile) | ✅ | store + `PromotionStepper` |
+| OOS-styled shell (navy sidebar + navy top bar), role switcher, "Reset demo" | ✅ | `components/layout/*` |
+
+### Evolutions since the original spec (§1–8)
+
+These were agreed in review sessions after the initial spec and are the current design:
+
+1. **Chrome & CTAs are blue, not teal/green.** The top bar is dark navy (matching the
+   sidebar) and all primary calls-to-action use an OOS **action-blue**. (The design token
+   is still named `teal` in `src/index.css` for utility-class compatibility, but holds a
+   blue value — noted there.) *(supersedes the "teal/green accents" note in §6)*
+2. **Evaluations are scored on a 1–10 scale, not percentages.** Scores render as e.g.
+   `9.2 / 10` with a qualitative label (Excellent / Good / Satisfactory / …). *(refines §4.2)*
+   See `lib/format.ts` (`formatScore`, `scoreLabel`, `scoreTone`).
+3. **The whole flow is modal-driven.** Initiating (`PromotionForm`) and approving
+   (`PromotionReviewModal`) are **modals over the existing UI**, not separate pages. The
+   old `/seafarer/:id/promotion` page was removed. *(refines §5.5)*
+4. **The profile Summary tab shows normal crew summary, not the decision-support panels.**
+   The Summary shows the promotion workflow card at the top plus OOS-style crew details /
+   service summary / documents (`ProfileSummary`). Experience / evaluations / licences are
+   revealed **only** in the review modal, when the approver clicks "Review & decide".
+   *(refines §4.2 / §5)*
+
+### Not built (deferred, as per §2 non-goals and §5/§7/§8)
+
+- Promotions dashboard / candidate ranking, eligibility-criteria engine, gap analysis,
+  succession forecasting, audit-pack export.
+- Configuration UIs (approval chain, criteria) — the chain is hardcoded.
+- Request-more-info loop; parallel approval; explicit skip-by-senior demo; in-flight list.
+- Real integrations, real email, persistence (state is in-memory and resets on refresh).
