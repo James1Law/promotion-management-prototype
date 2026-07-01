@@ -31,7 +31,7 @@ export interface Evaluation {
   id: string;
   date: string; // ISO
   formType: string; // e.g. "Onboard appraisal"
-  /** Overall score as a percentage 0–100 (prototype normalises to this). */
+  /** Overall score on a 1–10 scale (10 = excellent). */
   score: number;
   evaluator: string;
   rankHeld: string;

@@ -1,6 +1,6 @@
 import type { Seafarer } from '../../data/types';
 import { EXTERNAL_LINKS, RECENT_EVALUATION_COUNT } from '../../data/formConfig';
-import { formatDate, scoreTone } from '../../lib/format';
+import { formatDate, formatScore, scoreLabel, scoreTone } from '../../lib/format';
 import { Card, CardBody, CardHeader } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { IconExternal } from '../layout/icons';
@@ -39,7 +39,13 @@ export function EvaluationsPanel({ seafarer }: { seafarer: Seafarer }) {
                 {formatDate(ev.date)} · {ev.rankHeld} · {ev.vesselType} · {ev.evaluator}
               </div>
             </div>
-            <Badge tone={toneToBadge[scoreTone(ev.score)]}>{ev.score}%</Badge>
+            <div className="flex shrink-0 flex-col items-end gap-1 pl-3">
+              <Badge tone={toneToBadge[scoreTone(ev.score)]}>
+                {formatScore(ev.score)}
+                <span className="opacity-60"> / 10</span>
+              </Badge>
+              <span className="text-xs text-muted">{scoreLabel(ev.score)}</span>
+            </div>
           </div>
         ))}
       </CardBody>

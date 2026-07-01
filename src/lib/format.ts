@@ -11,9 +11,23 @@ export function formatYears(value: number): string {
   return `${value % 1 === 0 ? value.toFixed(0) : value.toFixed(1)} yrs`;
 }
 
-/** Bucket an evaluation score (0–100) into a status colour token. */
+/** Format an evaluation score on the 1–10 scale, e.g. "9.2". */
+export function formatScore(score: number): string {
+  return score.toFixed(1);
+}
+
+/** Bucket an evaluation score (1–10) into a status colour token. */
 export function scoreTone(score: number): 'ok' | 'warn' | 'danger' {
-  if (score >= 85) return 'ok';
-  if (score >= 70) return 'warn';
+  if (score >= 8) return 'ok';
+  if (score >= 6) return 'warn';
   return 'danger';
+}
+
+/** Qualitative label for a 1–10 evaluation score, as used in OOS. */
+export function scoreLabel(score: number): string {
+  if (score >= 9) return 'Excellent';
+  if (score >= 7.5) return 'Good';
+  if (score >= 6) return 'Satisfactory';
+  if (score >= 4) return 'Poor';
+  return 'Very poor';
 }
