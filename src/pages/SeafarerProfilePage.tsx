@@ -10,6 +10,7 @@ import { Modal } from '../components/ui/Modal';
 import { FormLabel } from '../components/ui/Field';
 import { Avatar } from '../components/promotion/Avatar';
 import { ProfileSummary } from '../components/promotion/ProfileSummary';
+import { ContractsPanel } from '../components/promotion/ContractsPanel';
 import { PromotionStepper } from '../components/promotion/PromotionStepper';
 import { PromotionStatusBadge } from '../components/promotion/PromotionStatusBadge';
 import { PromotionForm } from '../components/promotion/PromotionForm';
@@ -33,6 +34,7 @@ export function SeafarerProfilePage() {
   const [reviewOpen, setReviewOpen] = useState(false);
   const [planOpen, setPlanOpen] = useState(false);
   const [plannedDate, setPlannedDate] = useState(new Date().toISOString().slice(0, 10));
+  const [activeTab, setActiveTab] = useState('Summary');
 
   if (!seafarer) {
     return (
@@ -100,23 +102,26 @@ export function SeafarerProfilePage() {
           </CardBody>
         </Card>
 
-        {/* Tabs (decorative) */}
+        {/* Tabs — Summary and Contracts are live; the rest are placeholders. */}
         <div className="mb-4 flex flex-wrap gap-1 border-b border-line text-sm">
-          {TABS.map((t, i) => (
-            <span
+          {TABS.map((t) => (
+            <button
               key={t}
+              onClick={() => setActiveTab(t)}
               className={
-                'cursor-default border-b-2 px-3 py-2 ' +
-                (i === 0
+                'border-b-2 px-3 py-2 transition-colors ' +
+                (t === activeTab
                   ? 'border-teal font-medium text-ink'
-                  : 'border-transparent text-muted')
+                  : 'border-transparent text-muted hover:text-ink')
               }
             >
               {t}
-            </span>
+            </button>
           ))}
         </div>
 
+        {activeTab === 'Summary' && (
+          <>
         {/* Promotion approval panel */}
         {request && (
           <Card className="mb-4">
@@ -127,6 +132,7 @@ export function SeafarerProfilePage() {
                   {request.currentRank.name}{' '}
                   <IconArrowRight className="inline" width={12} height={12} />{' '}
                   <span className="font-medium text-ink">{request.targetRank.name}</span>
+                  {request.vessel && <span> · {request.vessel}</span>}
                 </span>
               }
             />
@@ -240,6 +246,20 @@ export function SeafarerProfilePage() {
             The promotion decision-support panels are NOT here — they appear
             only in the review modal. */}
         <ProfileSummary seafarer={seafarer} rank={rank} />
+          </>
+        )}
+
+        {activeTab === 'Contracts' && (
+          <ContractsPanel seafarer={seafarer} request={request} />
+        )}
+
+        {activeTab !== 'Summary' && activeTab !== 'Contracts' && (
+          <Card>
+            <CardBody className="text-sm text-muted">
+              The <strong>{activeTab}</strong> tab isn't part of this prototype.
+            </CardBody>
+          </Card>
+        )}
       </div>
 
       {/* Modals */}

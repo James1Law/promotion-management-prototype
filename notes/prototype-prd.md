@@ -130,6 +130,9 @@ Repo: <https://github.com/James1Law/promotion-management-prototype> (static SPA,
 | Persona-gated decisions + "Switch to …" shortcut | ✅ | review modal + `PersonaSwitcher` |
 | **Approved for promotion** → shoreside **Plan into crew change** (rank + date) | ✅ | `SeafarerProfilePage` (plan-into-crew-change modal) |
 | Simulated **onBOARD** vessel view + **Captain** persona; gated **Promote** executes the in-place rank change | ✅ | `pages/OnboardCrewPage`, `data/personas.ts` |
+| Decision-support shows **last 3 vessels/contracts** (spot vessel-type/size mismatches); Experience compacted | ✅ | `components/promotion/ExperiencePanel`, `data/formConfig.ts` |
+| **Vessel** on the promotion record — auto (current vessel) if aboard, **planned-vessel dropdown** if at home | ✅ | `PromotionForm`, `data/vessels.ts` |
+| Live **Contracts tab** (Present/Past + inline **Promotion** markers, incl. the applied promotion) | ✅ | `components/promotion/ContractsPanel`, `SeafarerProfilePage` |
 | **Rejection path** (reason captured, workflow halted, shown on profile) | ✅ | store + `PromotionStepper` |
 | OOS-styled shell (navy sidebar + navy top bar), role switcher, "Reset demo" | ✅ | `components/layout/*` |
 
@@ -208,6 +211,14 @@ Open question we could not verify (crewing can't currently replicate the live be
 whether the rank change technically fires from the shoreside schedule (effective-dated) or
 strictly requires the onBOARD click. It does not affect the prototype — the point being
 demonstrated is the **approval gate**, which holds either way.
+
+**At-home promotions (edge case, documented not built).** Promoting someone who is *at home*
+uses the **same decide → approve** front half — approval is location-independent. Execution
+differs: there is no onBOARD in-place Promote; the rank change is recorded ashore and the
+seafarer is simply **assigned at the new rank** for their next contract (signing on at the
+new rank). Confirmed as an edge case, so the distinct at-home execution path is **not built**;
+the prototype instead shows the *inputs* for it — a seed seafarer on leave (Sofia Marchetti)
+and the promotion form's **planned-vessel dropdown** for a not-onboard seafarer.
 
 **Fuller promotion criteria to capture later (Sophie's ask).** Beyond years-in-rank,
 licences and evaluation scores (already shown): captain **recommendations** (count / from

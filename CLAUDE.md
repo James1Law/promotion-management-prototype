@@ -45,6 +45,7 @@ src/
     types.ts            ← single source of truth for data shapes
     seafarers.ts        ← seed seafarers
     ranks.ts            ← rank ladder + progression (drives target-rank options)
+    vessels.ts          ← vessel catalogue (planned-vessel dropdown for at-home crew)
     approvalChains.ts   ← approval workflow, resolved PER TRANSITION — CHANGE THE WORKFLOW HERE
     personas.ts         ← prototype role switcher (approvers derived from the chains + Captain)
     formConfig.ts       ← which experience rows / how many evaluations / deep links
@@ -56,8 +57,8 @@ src/
     layout/             ← Shell, Sidebar, TopBar, PersonaSwitcher, icons
     promotion/          ← promotion-specific, reused across screens:
                           PromotionForm, PromotionReviewModal, PromotionStepper,
-                          ProfileSummary, ExperiencePanel, EvaluationsPanel,
-                          LicencesPanel, EmailPreview, …
+                          ProfileSummary, ContractsPanel, ExperiencePanel,
+                          EvaluationsPanel, LicencesPanel, EmailPreview, …
   pages/                ← one file per route (CrewDirectory, SeafarerProfile,
                           Assignments, OnboardCrew [the simulated onBOARD vessel
                           view — where a promotion is executed], StubPage)
@@ -84,7 +85,8 @@ kept for utility-class compatibility); the navy is the chrome colour (sidebar + 
 - **Change the evaluation scoring scale** → evaluations use a **1–10** scale (10 = excellent),
   shown as `9.2 / 10` with a qualitative label. Bands and formatting live in `lib/format.ts`
   (`formatScore`, `scoreLabel`, `scoreTone`); seed values are on `Evaluation.score`.
-- **Add a seafarer** → append to `SEAFARERS` in `seafarers.ts`.
+- **Add a seafarer** → append to `SEAFARERS` in `seafarers.ts` (now requires `onboard`
+  + a `contracts` timeline; set `onboard: false` for an at-home seafarer).
 - **Add a rank transition** → extend `RANKS` / `PROGRESSION` in `ranks.ts`.
 - **Add an entry point** → render `<PromotionForm seafarer=… />` behind a button;
   every entry point opens the same form by design (see PRD §4.1).

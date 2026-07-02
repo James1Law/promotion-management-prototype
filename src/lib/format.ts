@@ -11,6 +11,28 @@ export function formatYears(value: number): string {
   return `${value % 1 === 0 ? value.toFixed(0) : value.toFixed(1)} yrs`;
 }
 
+/**
+ * Service length between two dates as OOS shows it, e.g. "10m 19d" or "1y 3m".
+ * `to` defaults to today (an open, current contract).
+ */
+export function formatServiceLength(from: string, to?: string): string {
+  const start = new Date(from);
+  const end = to ? new Date(to) : new Date();
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end < start) return '—';
+  let months =
+    (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+  let days = end.getDate() - start.getDate();
+  if (days < 0) {
+    months -= 1;
+    const prevMonth = new Date(end.getFullYear(), end.getMonth(), 0).getDate();
+    days += prevMonth;
+  }
+  const years = Math.floor(months / 12);
+  const remMonths = months % 12;
+  if (years > 0) return `${years}y ${remMonths}m`;
+  return `${remMonths}m ${days}d`;
+}
+
 /** Format an evaluation score on the 1–10 scale, e.g. "9.2". */
 export function formatScore(score: number): string {
   return score.toFixed(1);

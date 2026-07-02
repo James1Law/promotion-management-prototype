@@ -23,6 +23,7 @@ export const SEAFARERS: Seafarer[] = [
     nextAssignment: 'MT Nordic Star (Tanker)',
     joiningDate: '2025-11-18',
     seniorityDate: '2021-03-01',
+    onboard: true,
     experience: {
       yearsInRank: 3.4,
       yearsAsOfficer: 6.1,
@@ -116,6 +117,34 @@ export const SEAFARERS: Seafarer[] = [
         issueDate: '2022-01-20',
       },
     ],
+    contracts: [
+      {
+        id: 'ct-h1',
+        vesselName: 'MT Nordic Star',
+        vesselType: 'TANKER',
+        rankOnBoard: 'Second Officer',
+        signOn: '2025-11-18',
+        onboard: true,
+      },
+      {
+        id: 'ct-h2',
+        vesselName: 'MT Gulf Trader',
+        vesselType: 'TANKER',
+        rankOnBoard: 'Second Officer',
+        signOn: '2024-06-01',
+        leaving: '2025-02-10',
+        reasonForLeaving: 'End of contract',
+      },
+      {
+        id: 'ct-h3',
+        vesselName: 'MT Baltic Wave',
+        vesselType: 'TANKER',
+        rankOnBoard: 'Third Officer',
+        signOn: '2023-01-15',
+        leaving: '2023-11-20',
+        reasonForLeaving: 'Rank change',
+      },
+    ],
     rankHistory: [
       {
         rank: { code: '2/O', name: 'Second Officer' },
@@ -146,6 +175,7 @@ export const SEAFARERS: Seafarer[] = [
     nextAssignment: 'MV Pacific Bridge (Container)',
     joiningDate: '2026-01-08',
     seniorityDate: '2019-07-01',
+    onboard: true,
     experience: {
       yearsInRank: 2.7,
       yearsAsOfficer: 8.3,
@@ -221,6 +251,34 @@ export const SEAFARERS: Seafarer[] = [
         expiryDate: '2025-05-01',
       },
     ],
+    contracts: [
+      {
+        id: 'ct-m1',
+        vesselName: 'MV Pacific Bridge',
+        vesselType: 'CONTAINER',
+        rankOnBoard: 'Second Engineer',
+        signOn: '2026-01-08',
+        onboard: true,
+      },
+      {
+        id: 'ct-m2',
+        vesselName: 'MV Atlantic Crest',
+        vesselType: 'CONTAINER',
+        rankOnBoard: 'Second Engineer',
+        signOn: '2024-09-01',
+        leaving: '2025-06-15',
+        reasonForLeaving: 'End of contract',
+      },
+      {
+        id: 'ct-m3',
+        vesselName: 'MV Cape Horizon',
+        vesselType: 'BULK CARRIER',
+        rankOnBoard: 'Third Engineer',
+        signOn: '2021-05-01',
+        leaving: '2022-02-01',
+        reasonForLeaving: 'Rank change',
+      },
+    ],
     rankHistory: [
       {
         rank: { code: '2/E', name: 'Second Engineer' },
@@ -253,6 +311,7 @@ export const SEAFARERS: Seafarer[] = [
     nextAssignment: 'MV Pacific Bridge (Container)',
     joiningDate: '2026-02-20',
     seniorityDate: '2022-05-01',
+    onboard: true,
     experience: {
       yearsInRank: 2.1,
       yearsAsOfficer: 3.6,
@@ -319,6 +378,34 @@ export const SEAFARERS: Seafarer[] = [
         status: 'valid',
       },
     ],
+    contracts: [
+      {
+        id: 'ct-o1',
+        vesselName: 'MV Pacific Bridge',
+        vesselType: 'CONTAINER',
+        rankOnBoard: 'Third Officer',
+        signOn: '2026-02-20',
+        onboard: true,
+      },
+      {
+        id: 'ct-o2',
+        vesselName: 'MV Coral Express',
+        vesselType: 'CONTAINER',
+        rankOnBoard: 'Third Officer',
+        signOn: '2024-08-01',
+        leaving: '2025-05-10',
+        reasonForLeaving: 'End of contract',
+      },
+      {
+        id: 'ct-o3',
+        vesselName: 'MV Cape Horizon',
+        vesselType: 'BULK CARRIER',
+        rankOnBoard: 'Third Officer',
+        signOn: '2023-01-01',
+        leaving: '2023-10-01',
+        reasonForLeaving: 'End of contract',
+      },
+    ],
     rankHistory: [
       {
         rank: { code: '3/O', name: 'Third Officer' },
@@ -344,6 +431,7 @@ export const SEAFARERS: Seafarer[] = [
     nextAssignment: 'MV Iron Crest (Bulk Carrier)',
     joiningDate: '2026-03-05',
     seniorityDate: '2018-09-01',
+    onboard: true,
     experience: {
       yearsInRank: 3.2,
       yearsAsOfficer: 0,
@@ -392,6 +480,25 @@ export const SEAFARERS: Seafarer[] = [
         status: 'valid',
       },
     ],
+    contracts: [
+      {
+        id: 'ct-s1',
+        vesselName: 'MV Iron Crest',
+        vesselType: 'BULK CARRIER',
+        rankOnBoard: 'Fitter (Grade B)',
+        signOn: '2026-03-05',
+        onboard: true,
+      },
+      {
+        id: 'ct-s2',
+        vesselName: 'MV Ore Master',
+        vesselType: 'BULK CARRIER',
+        rankOnBoard: 'Fitter (Grade B)',
+        signOn: '2024-06-01',
+        leaving: '2025-01-15',
+        reasonForLeaving: 'End of contract',
+      },
+    ],
     rankHistory: [
       {
         rank: { code: 'FTR-B', name: 'Fitter (Grade B)' },
@@ -401,8 +508,136 @@ export const SEAFARERS: Seafarer[] = [
       },
     ],
   },
+  // At-home example: on leave, strong record, considered for a management
+  // promotion (3/E → 2/E). Not aboard, so the promotion form asks for a PLANNED
+  // vessel (dropdown) instead of auto-filling a current one. The at-home
+  // execution itself (assign at new rank, sign on) is a documented edge case.
+  {
+    id: 'sf-marchetti',
+    name: 'Sofia Marchetti',
+    crewNumber: '107122',
+    currentRank: { code: '3/E', name: 'Third Engineer' },
+    vesselType: 'CONTAINER',
+    nationality: 'Italian',
+    manningAgent: 'Zodiac Maritime',
+    dateOfBirth: '1991-09-12',
+    gender: 'Female',
+    homeAirport: 'GOA — Genoa',
+    nextAssignment: 'On leave — no active assignment',
+    seniorityDate: '2020-02-01',
+    onboard: false,
+    experience: {
+      yearsInRank: 2.9,
+      yearsAsOfficer: 5.4,
+      totalSeaTimeYears: 8.1,
+      yearsOnTankers: 0,
+      yearsOnContainers: 6.5,
+      yearsOnBulk: 1.6,
+    },
+    evaluations: [
+      {
+        id: 'ev-mar1',
+        date: '2025-12-15',
+        formType: 'Onboard appraisal',
+        score: 9.1,
+        evaluator: 'C/E K. Larsen',
+        rankHeld: 'Third Engineer',
+        vesselType: 'CONTAINER',
+        recommendedForPromotion: true,
+      },
+      {
+        id: 'ev-mar2',
+        date: '2025-05-20',
+        formType: 'Onboard appraisal',
+        score: 8.7,
+        evaluator: 'C/E K. Larsen',
+        rankHeld: 'Third Engineer',
+        vesselType: 'CONTAINER',
+        recommendedForPromotion: true,
+      },
+      {
+        id: 'ev-mar3',
+        date: '2024-10-02',
+        formType: 'Onboard appraisal',
+        score: 8.5,
+        evaluator: 'C/E R. Bianchi',
+        rankHeld: 'Third Engineer',
+        vesselType: 'CONTAINER',
+      },
+    ],
+    documents: [
+      {
+        id: 'doc-mar1',
+        name: 'Certificate of Competency — Engineer Officer (Management)',
+        category: 'Licence',
+        reference: 'IT-COC-33027',
+        issueDate: '2023-03-01',
+        expiryDate: '2028-03-01',
+        status: 'valid',
+      },
+      {
+        id: 'doc-mar2',
+        name: 'High Voltage Safety & Operation',
+        category: 'Certificate',
+        reference: 'HV-5540',
+        issueDate: '2023-07-10',
+        expiryDate: '2028-07-10',
+        status: 'valid',
+      },
+      {
+        id: 'doc-mar3',
+        name: 'Engine Room Resource Management',
+        category: 'Training',
+        reference: 'ERM-9004',
+        issueDate: '2022-11-05',
+        status: 'valid',
+      },
+    ],
+    contracts: [
+      {
+        id: 'ct-mar1',
+        vesselName: 'MV Adriatic Star',
+        vesselType: 'CONTAINER',
+        rankOnBoard: 'Third Engineer',
+        signOn: '2024-05-01',
+        leaving: '2025-12-20',
+        reasonForLeaving: 'End of contract',
+      },
+      {
+        id: 'ct-mar2',
+        vesselName: 'MV Atlantic Crest',
+        vesselType: 'CONTAINER',
+        rankOnBoard: 'Third Engineer',
+        signOn: '2023-01-10',
+        leaving: '2023-11-15',
+        reasonForLeaving: 'End of contract',
+      },
+      {
+        id: 'ct-mar3',
+        vesselName: 'MV Coral Express',
+        vesselType: 'CONTAINER',
+        rankOnBoard: 'Fourth Engineer',
+        signOn: '2021-06-01',
+        leaving: '2022-03-01',
+        reasonForLeaving: 'Rank change',
+      },
+    ],
+    rankHistory: [
+      {
+        rank: { code: '3/E', name: 'Third Engineer' },
+        vesselType: 'CONTAINER',
+        from: '2022-04-01',
+        reason: 'Promotion',
+      },
+    ],
+  },
 ];
 
 export function seafarerById(id: string): Seafarer | undefined {
   return SEAFARERS.find((s) => s.id === id);
+}
+
+/** The seafarer's current vessel — the open (onboard) contract, if any. */
+export function currentVessel(seafarer: Seafarer): string | undefined {
+  return seafarer.contracts.find((c) => c.onboard)?.vesselName;
 }

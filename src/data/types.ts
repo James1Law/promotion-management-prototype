@@ -50,6 +50,23 @@ export interface RankHistoryEntry {
 }
 
 /**
+ * A contract / service period on a specific vessel (the OOS "Contracts" tab).
+ * Distinct from rankHistory: it carries the vessel NAME, so approvers can spot
+ * vessel-type / size mismatches (e.g. handysize experience vs a cape promotion).
+ */
+export interface Contract {
+  id: string;
+  vesselName: string;
+  vesselType: VesselType;
+  rankOnBoard: string; // rank held during this contract
+  signOn: string; // ISO
+  leaving?: string; // ISO — omitted if this is the current (open) contract
+  reasonForLeaving?: string;
+  /** True for the current, open contract (the seafarer is aboard this vessel). */
+  onboard?: boolean;
+}
+
+/**
  * Raw experience metrics held against a seafarer. formConfig decides which of
  * these to surface and how to label them (and whether a row is vessel-type
  * conditional), so adding a metric here + a row in config is all it takes.
@@ -77,9 +94,12 @@ export interface Seafarer {
   nextAssignment?: string;
   joiningDate?: string; // ISO
   seniorityDate?: string; // ISO
+  /** Whether the seafarer is currently aboard a vessel (vs on leave at home). */
+  onboard: boolean;
   experience: Experience;
   evaluations: Evaluation[]; // newest first
   documents: LicenceDocument[];
+  contracts: Contract[]; // newest first
   rankHistory: RankHistoryEntry[];
 }
 
@@ -125,6 +145,8 @@ export interface PromotionRequest {
   currentRank: Rank;
   targetRank: Rank;
   vesselType: VesselType;
+  /** Vessel the promotion is against — current vessel if aboard, else planned. */
+  vessel?: string;
   remarks: string;
   attachments: Attachment[];
   initiatedByPersonaId: string;

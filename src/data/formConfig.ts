@@ -43,6 +43,9 @@ export const EXPERIENCE_ROWS: ExperienceRow[] = [
 /** How many recent evaluations to surface on the form. */
 export const RECENT_EVALUATION_COUNT = 3;
 
+/** How many recent contracts/vessels to surface in the Experience panel. */
+export const RECENT_VESSEL_COUNT = 3;
+
 /** Deep-link stubs — open the relevant OOS module in a new tab (mocked). */
 export const EXTERNAL_LINKS = {
   evaluations: (seafarerId: string) => `#/seafarer/${seafarerId}/evaluations`,

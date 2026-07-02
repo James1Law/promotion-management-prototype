@@ -89,7 +89,7 @@ export function OnboardCrewPage() {
           </div>
 
           <div className="space-y-2">
-            {SEAFARERS.map((s) => {
+            {SEAFARERS.filter((s) => s.onboard).map((s) => {
               const req = requests[s.id];
               const rank = effectiveRank(s, req);
               const planned =

@@ -132,7 +132,14 @@ export function PromotionReviewModal({
         )}
 
         {/* Submitted context */}
-        <div className="grid gap-4 rounded-md border border-line p-4 sm:grid-cols-2">
+        <div className="space-y-4 rounded-md border border-line p-4">
+          <div className="text-sm">
+            <span className="text-xs font-medium uppercase tracking-wide text-faint">Vessel</span>{' '}
+            <span className="ml-1 font-medium text-ink">
+              {request.vessel ?? '—'}
+            </span>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <div className="text-xs font-medium uppercase tracking-wide text-faint">Remarks</div>
             <div className="mt-1 text-sm text-ink">
@@ -152,6 +159,7 @@ export function PromotionReviewModal({
                 <span className="text-sm text-faint">None</span>
               )}
             </div>
+          </div>
           </div>
         </div>
 

@@ -23,6 +23,7 @@ type Decision = 'approved' | 'rejected' | 'skipped';
 interface InitiateInput {
   seafarerId: string;
   targetRank: Rank;
+  vessel?: string;
   remarks: string;
   attachments: PromotionRequest['attachments'];
 }
@@ -71,7 +72,7 @@ export const usePromotionStore = create<PromotionState>((set) => ({
 
   setPersona: (id) => set({ currentPersonaId: id }),
 
-  initiatePromotion: ({ seafarerId, targetRank, remarks, attachments }) =>
+  initiatePromotion: ({ seafarerId, targetRank, vessel, remarks, attachments }) =>
     set((state) => {
       const seafarer = seafarerById(seafarerId);
       if (!seafarer) return state;
@@ -82,6 +83,7 @@ export const usePromotionStore = create<PromotionState>((set) => ({
         currentRank: seafarer.currentRank,
         targetRank,
         vesselType: seafarer.vesselType,
+        vessel,
         remarks,
         attachments,
         initiatedByPersonaId: state.currentPersonaId,

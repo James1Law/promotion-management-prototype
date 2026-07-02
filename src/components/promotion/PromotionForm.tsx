@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Attachment, Rank, Seafarer } from '../../data/types';
 import { nextRanks } from '../../data/ranks';
+import { currentVessel } from '../../data/seafarers';
+import { VESSELS } from '../../data/vessels';
 import { usePromotionStore } from '../../store/promotionStore';
 import { chainForTransition } from '../../data/approvalChains';
 import { Modal } from '../ui/Modal';
@@ -29,18 +31,22 @@ export function PromotionForm({
   const initiate = usePromotionStore((s) => s.initiatePromotion);
   const targets = useMemo(() => nextRanks(seafarer.currentRank.code), [seafarer]);
   const [targetCode, setTargetCode] = useState(targets[0]?.code ?? '');
+  const [vessel, setVessel] = useState(currentVessel(seafarer) ?? '');
   const [remarks, setRemarks] = useState('');
   const [attachments, setAttachments] = useState<Attachment[]>([]);
 
   // The same form instance is reused across seafarers (Crew Directory reuses it,
-  // and profile→profile navigation doesn't remount it). Reset the selection when
-  // the target options change so a stale targetCode can't break submit.
+  // and profile→profile navigation doesn't remount it). Reset selections when the
+  // seafarer changes so stale state can't break submit or carry the wrong vessel.
   useEffect(() => {
     setTargetCode(targets[0]?.code ?? '');
-  }, [targets]);
+    setVessel(currentVessel(seafarer) ?? '');
+  }, [targets, seafarer]);
 
   const target: Rank | undefined = targets.find((r) => r.code === targetCode);
-  const canSubmit = Boolean(target);
+  // Onboard → vessel auto-populates and is fixed; at home → a planned vessel must
+  // be chosen from the catalogue before the promotion can be raised.
+  const canSubmit = Boolean(target) && (seafarer.onboard || Boolean(vessel));
   const chain = target ? chainForTransition(seafarer.currentRank.code, target.code) : [];
   const needsWorkflow = chain.length > 0;
 
@@ -51,7 +57,13 @@ export function PromotionForm({
 
   const submit = () => {
     if (!target) return;
-    initiate({ seafarerId: seafarer.id, targetRank: target, remarks, attachments });
+    initiate({
+      seafarerId: seafarer.id,
+      targetRank: target,
+      vessel: vessel || undefined,
+      remarks,
+      attachments,
+    });
     onClose();
   };
 
@@ -112,6 +124,28 @@ export function PromotionForm({
               </select>
             ) : (
               <div className="text-sm text-muted">No configured progression from this rank.</div>
+            )}
+          </div>
+          <div>
+            <FormLabel>Vessel</FormLabel>
+            {seafarer.onboard ? (
+              <div className="flex items-center gap-1.5 py-2 text-sm font-medium text-ink">
+                {vessel || '—'}
+                <span className="text-xs font-normal text-muted">(current)</span>
+              </div>
+            ) : (
+              <select
+                value={vessel}
+                onChange={(e) => setVessel(e.target.value)}
+                className="rounded-md border border-line bg-white px-3 py-2 text-sm text-ink focus:border-teal focus:outline-none"
+              >
+                <option value="">Select planned vessel…</option>
+                {VESSELS.map((v) => (
+                  <option key={v.name} value={v.name}>
+                    {v.name} · {v.type}
+                  </option>
+                ))}
+              </select>
             )}
           </div>
           <div className="ml-auto text-right">
