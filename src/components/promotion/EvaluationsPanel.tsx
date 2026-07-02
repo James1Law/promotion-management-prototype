@@ -3,7 +3,7 @@ import { EXTERNAL_LINKS, RECENT_EVALUATION_COUNT } from '../../data/formConfig';
 import { formatDate, formatScore, scoreLabel, scoreTone } from '../../lib/format';
 import { Card, CardBody, CardHeader } from '../ui/Card';
 import { Badge } from '../ui/Badge';
-import { IconExternal } from '../layout/icons';
+import { IconExternal, IconThumbsUp } from '../layout/icons';
 
 const toneToBadge = { ok: 'ok', warn: 'warn', danger: 'danger' } as const;
 
@@ -33,6 +33,14 @@ export function EvaluationsPanel({ seafarer }: { seafarer: Seafarer }) {
             <div className="min-w-0">
               <div className="flex items-center gap-2 text-sm font-medium text-ink">
                 {ev.formType}
+                {ev.recommendedForPromotion && (
+                  <span
+                    className="inline-flex items-center gap-1 rounded-full bg-teal/10 px-1.5 py-0.5 text-xs font-medium text-teal"
+                    title="Evaluator recommended for promotion"
+                  >
+                    <IconThumbsUp width={13} height={13} /> Recommended
+                  </span>
+                )}
                 {ev.flagged && <Badge tone="warn">Flagged</Badge>}
               </div>
               <div className="mt-0.5 text-xs text-muted">

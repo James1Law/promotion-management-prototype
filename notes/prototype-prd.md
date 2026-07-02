@@ -123,12 +123,13 @@ Repo: <https://github.com/James1Law/promotion-management-prototype> (static SPA,
 | Promotion **form** (pre-populated: experience, evaluations, licences, remarks, attachment) | ✅ | `components/promotion/PromotionForm` |
 | Unified entry points (Crew Directory + Assignments both open the same form) | ✅ | `pages/CrewDirectoryPage`, `pages/AssignmentsPage` |
 | Vessel-type-conditional experience rows (tankers/containers/bulk) | ✅ | `data/formConfig.ts` (`EXPERIENCE_ROWS`, `showIf`) |
-| 3-step sequential approval workflow (approve / reject / pause / skip) | ✅ | `data/approvalChains.ts`, `store/promotionStore.ts` |
+| Per-transition approval workflow (full / single-step / none), approve / reject / pause / skip | ✅ | `data/approvalChains.ts`, `store/promotionStore.ts` |
 | Applicant-style **stepper** on the profile (line centred on nodes) | ✅ | `components/promotion/PromotionStepper` |
 | Simulated **email** notification with deep link into the review | ✅ | `components/promotion/EmailPreview` |
 | **Approver review** (decision-support + decision controls) | ✅ | `components/promotion/PromotionReviewModal` |
 | Persona-gated decisions + "Switch to …" shortcut | ✅ | review modal + `PersonaSwitcher` |
-| **Approved for promotion** state + deliberate **manual rank change** | ✅ | `SeafarerProfilePage` (apply-rank-change modal) |
+| **Approved for promotion** → shoreside **Plan into crew change** (rank + date) | ✅ | `SeafarerProfilePage` (plan-into-crew-change modal) |
+| Simulated **onBOARD** vessel view + **Captain** persona; gated **Promote** executes the in-place rank change | ✅ | `pages/OnboardCrewPage`, `data/personas.ts` |
 | **Rejection path** (reason captured, workflow halted, shown on profile) | ✅ | store + `PromotionStepper` |
 | OOS-styled shell (navy sidebar + navy top bar), role switcher, "Reset demo" | ✅ | `components/layout/*` |
 
@@ -151,6 +152,69 @@ These were agreed in review sessions after the initial spec and are the current 
    service summary / documents (`ProfileSummary`). Experience / evaluations / licences are
    revealed **only** in the review modal, when the approver clicks "Review & decide".
    *(refines §4.2 / §5)*
+5. **The approval workflow is now resolved per rank-transition, not one fixed chain.**
+   Feedback (Jul 2026) confirmed real transitions need different treatment. The chain is
+   keyed off the target rank's STCW responsibility tier (`data/approvalChains.ts`):
+   - **Management-level** promotions (→ Chief Officer, Master, 2nd Engineer, Chief Engineer)
+     run the **full** chain: Superintendent → DPA → Crewing Director.
+   - **Operational-level** promotions (→ 2nd/3rd Officer, 3rd/4th Engineer) need a
+     **single** Superintendent sign-off.
+   - **Rating / trade** lateral moves (→ AB, Bosun, Fitter Grade A) need **no workflow** —
+     the operator records the change directly (form submits straight to "Approved for
+     promotion"). Seed crew now include an operational example (Chidi Okafor, 3/O→2/O) and
+     a trade example (Emmanuel Santos, Fitter B→A) so all three tiers are clickable.
+     *(supersedes the fixed 3-step decision in §4.3 / §8)*
+6. **Evaluations surface a "Recommended for promotion" thumbs-up.** Where recent evaluation
+   scores are listed, an evaluation whose appraisal ticked *Recommended for promotion* shows
+   a thumbs-up chip (`Evaluation.recommendedForPromotion`, `EvaluationsPanel`). This is the
+   first of the "usual requirements" Sophie asked us to capture; the fuller criteria set
+   (recommendations count, specific certificates, HSQE/medical flags, sea-time by vessel
+   type) is documented below and deferred to a later pass.
+
+### The OOS ↔ onBOARD interaction (built)
+
+Feedback surfaced how a promotion actually *executes* in the wider product, which reconciles
+neatly with our "deliberate manual step". It is **three acts, three actors, gated in order**:
+
+1. **Decide (office, ashore/OOS):** initiate + approval workflow → **Approved for promotion**.
+   (The new part — today this is informal, no formal approval.)
+2. **Plan (office, ashore/OOS Crew Assignments):** only once approved, the office plans the
+   promotion into a crew-change slot — confirmed new rank + **promotion date**. This
+   *schedules* it (sets `plannedPromotionDate`); the rank does **not** change yet. It is what
+   makes a **Promote** button appear onBOARD.
+3. **Execute (Captain, onBOARD, on the day):** because it is approved **and** planned, the
+   Captain sees a **Promote** button against that seafarer (distinct from Sign-on — they are
+   already aboard, so the rank changes *in place*). This is the actual rank change; it flows
+   back to OOS / payroll.
+
+So there are two "Promote" buttons and they are **not** duplicates: the shoreside one
+*plans/schedules*, the onBOARD one *executes*. Sophie's key rule — **no Promote button
+onBOARD until fully approved** — is the gate we model.
+
+**As built (item B):**
+
+| Piece | Where |
+|---|---|
+| `plannedPromotionDate` on the request | `data/types.ts` |
+| Shoreside **Plan into crew change** step (approved-only; sets rank + date) | `SeafarerProfilePage` (replaces the old ashore "Apply rank change") |
+| Simulated **onBOARD** vessel screen (own chrome, crew grouped by rank, Sign-on/off) | `pages/OnboardCrewPage` (`/onboard`) |
+| **Captain** persona (`kind: 'promoter'`) — gates the onBOARD Promote | `data/personas.ts` |
+| Promote appears onBOARD **only** when approved **and** planned; Promote → confirm modal → in-place rank change (`applyRankChange`) | `OnboardCrewPage` |
+
+Prototype simplification: the onBOARD screen shows all seed crew as one demo vessel; the
+office↔ship data sync is instantaneous (shared in-memory store).
+
+Open question we could not verify (crewing can't currently replicate the live behaviour):
+whether the rank change technically fires from the shoreside schedule (effective-dated) or
+strictly requires the onBOARD click. It does not affect the prototype — the point being
+demonstrated is the **approval gate**, which holds either way.
+
+**Fuller promotion criteria to capture later (Sophie's ask).** Beyond years-in-rank,
+licences and evaluation scores (already shown): captain **recommendations** (count / from
+distinct captains), **specific certificates/training** per transition (e.g. COW for tankers),
+**sea-time by vessel type** in the target rank, valid **medical / fit-to-work**, and no open
+**HSQE / disciplinary** flags — each markable mandatory / recommended / optional per
+transition. To be confirmed with crewing, then wired into the decision-support panels.
 
 ### Not built (deferred, as per §2 non-goals and §5/§7/§8)
 

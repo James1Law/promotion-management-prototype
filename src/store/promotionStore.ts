@@ -7,7 +7,7 @@ import type {
   Seafarer,
   StageStatus,
 } from '../data/types';
-import { DEFAULT_APPROVAL_CHAIN } from '../data/approvalChains';
+import { chainForTransition } from '../data/approvalChains';
 import { DEFAULT_PERSONA_ID, PERSONAS } from '../data/personas';
 import { seafarerById } from '../data/seafarers';
 
@@ -37,14 +37,17 @@ interface PromotionState {
   initiatePromotion: (input: InitiateInput) => void;
   decideStage: (seafarerId: string, stageId: string, decision: Decision, comment: string) => void;
   setStagePaused: (seafarerId: string, stageId: string, paused: boolean, comment?: string) => void;
+  /** Shoreside: plan an approved promotion into a crew-change slot (sets the date). */
+  planPromotion: (seafarerId: string, plannedDate: string) => void;
+  /** onBOARD: the Captain executes the planned promotion — the rank changes. */
   applyRankChange: (seafarerId: string, effectiveDate: string) => void;
   resetPromotion: (seafarerId: string) => void;
 }
 
 const nowISO = () => new Date().toISOString();
 
-function buildStages(): ApprovalStageState[] {
-  return DEFAULT_APPROVAL_CHAIN.map((def, i) => ({
+function buildStages(fromCode: string, toCode: string): ApprovalStageState[] {
+  return chainForTransition(fromCode, toCode).map((def, i) => ({
     ...def,
     status: (i === 0 ? 'current' : 'waiting') as StageStatus,
   }));
@@ -72,6 +75,7 @@ export const usePromotionStore = create<PromotionState>((set) => ({
     set((state) => {
       const seafarer = seafarerById(seafarerId);
       if (!seafarer) return state;
+      const stages = buildStages(seafarer.currentRank.code, targetRank.code);
       const request: PromotionRequest = {
         id: `pr-${seafarerId}-${new Date().getTime()}`,
         seafarerId,
@@ -82,8 +86,10 @@ export const usePromotionStore = create<PromotionState>((set) => ({
         attachments,
         initiatedByPersonaId: state.currentPersonaId,
         initiatedAt: nowISO(),
-        status: 'pending',
-        stages: buildStages(),
+        // No approval chain for this transition → straight to "approved for
+        // promotion" (recorded directly); otherwise it enters the workflow.
+        status: stages.length ? 'pending' : 'approved',
+        stages,
       };
       return { requests: { ...state.requests, [seafarerId]: request } };
     }),
@@ -123,6 +129,18 @@ export const usePromotionStore = create<PromotionState>((set) => ({
           : s,
       );
       return { requests: { ...state.requests, [seafarerId]: { ...existing, stages } } };
+    }),
+
+  planPromotion: (seafarerId, plannedDate) =>
+    set((state) => {
+      const existing = state.requests[seafarerId];
+      if (!existing || existing.status !== 'approved') return state;
+      return {
+        requests: {
+          ...state.requests,
+          [seafarerId]: { ...existing, plannedPromotionDate: plannedDate },
+        },
+      };
     }),
 
   applyRankChange: (seafarerId, effectiveDate) =>

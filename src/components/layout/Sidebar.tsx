@@ -78,6 +78,24 @@ export function Sidebar() {
 
         <div className="px-5 py-2 text-[11px] uppercase tracking-wide text-white/40">Technical</div>
       </nav>
+
+      {/* Prototype-only cross-link: jump to the vessel's onBOARD instance. Not a
+          real Studio nav item — onBOARD is a separate app. */}
+      <div className="border-t border-white/10 px-3 py-3">
+        <NavLink
+          to="/onboard"
+          className={({ isActive }) =>
+            cn(
+              'flex items-center gap-2 rounded-md px-3 py-2 text-[13px] transition-colors',
+              isActive
+                ? 'bg-navy-deep text-white'
+                : 'text-white/70 hover:bg-navy-deep hover:text-white',
+            )
+          }
+        >
+          <span className="text-white/50">⚓</span> Open onBOARD (vessel)
+        </NavLink>
+      </div>
     </aside>
   );
 }

@@ -37,6 +37,8 @@ export interface Evaluation {
   rankHeld: string;
   vesselType: VesselType;
   flagged?: boolean;
+  /** Evaluator ticked "Recommended for promotion" on the appraisal form. */
+  recommendedForPromotion?: boolean;
 }
 
 export interface RankHistoryEntry {
@@ -129,7 +131,13 @@ export interface PromotionRequest {
   initiatedAt: string; // ISO
   status: PromotionStatus;
   stages: ApprovalStageState[];
-  /** Set when status becomes 'promoted'. */
+  /**
+   * Set when the office plans an approved promotion into a crew-change slot
+   * (the shoreside "Plan into crew change" step). Its presence is what makes the
+   * Promote button appear onBOARD — the promotion is scheduled but not yet done.
+   */
+  plannedPromotionDate?: string;
+  /** Set when status becomes 'promoted' (the Captain executes it onBOARD). */
   promotedAt?: string;
   effectiveRankChangeDate?: string;
 }

@@ -45,8 +45,8 @@ src/
     types.ts            ← single source of truth for data shapes
     seafarers.ts        ← seed seafarers
     ranks.ts            ← rank ladder + progression (drives target-rank options)
-    approvalChains.ts   ← the approval workflow (stages) — CHANGE THE WORKFLOW HERE
-    personas.ts         ← prototype role switcher (approvers derived from the chain)
+    approvalChains.ts   ← approval workflow, resolved PER TRANSITION — CHANGE THE WORKFLOW HERE
+    personas.ts         ← prototype role switcher (approvers derived from the chains + Captain)
     formConfig.ts       ← which experience rows / how many evaluations / deep links
   store/
     promotionStore.ts   ← zustand: active persona + promotion requests + actions
@@ -59,7 +59,8 @@ src/
                           ProfileSummary, ExperiencePanel, EvaluationsPanel,
                           LicencesPanel, EmailPreview, …
   pages/                ← one file per route (CrewDirectory, SeafarerProfile,
-                          Assignments, StubPage)
+                          Assignments, OnboardCrew [the simulated onBOARD vessel
+                          view — where a promotion is executed], StubPage)
   App.tsx               ← routes
 ```
 
@@ -70,8 +71,12 @@ kept for utility-class compatibility); the navy is the chrome colour (sidebar + 
 
 ## How to make common changes
 
-- **Add/remove/reorder an approval step** → edit `data/approvalChains.ts`. The
-  stepper UI and the approver personas both derive from it automatically.
+- **Change which approval chain a promotion uses** → edit `data/approvalChains.ts`.
+  The chain is resolved **per rank-transition** (`chainForTransition`), keyed off the
+  target rank's tier: management-level = full 3-step, operational-level = single
+  sign-off, rating/trade = **no workflow** (recorded directly, request goes straight to
+  "Approved for promotion"). The stepper UI, the approver personas (`allApprovalStages`)
+  and the store all derive from it automatically.
 - **Add a piece of decision-support info** (e.g. a new experience metric) → add the
   field to `Experience` in `types.ts`, a value in each seed seafarer, and a row in
   `EXPERIENCE_ROWS` in `formConfig.ts`. Use `showIf` for vessel-type-conditional rows.
@@ -107,8 +112,11 @@ with SPA rewrites). Build command `npm run build`, output `dist/`.
 
 ## Current state & what's next
 
-The end-to-end flow is built and verified: initiate → 3-step approval (approve / reject /
-pause / skip, persona-gated) → Approved for Promotion → manual rank change, plus a rejection
-path. See **`notes/prototype-prd.md` §9** for the full as-built status, the evolutions since
-the original spec (blue chrome/CTAs, 1–10 eval scores, modal-driven review, summary-only
-profile), and what's deferred. When picking up new work, read §9 first.
+The end-to-end flow is built and verified: initiate → **per-transition** approval (full /
+single-step / none, approve / reject / pause / skip, persona-gated) → Approved for Promotion
+→ shoreside **Plan into crew change** (rank + date) → **onBOARD Captain Promotes** (in-place
+rank change), plus a rejection path. See **`notes/prototype-prd.md` §9** for the full as-built
+status, the evolutions since the original spec (blue chrome/CTAs, 1–10 eval scores,
+modal-driven review, summary-only profile, per-transition workflow tiers, recommendation
+thumbs-up), and the **OOS↔onBOARD interaction** (the three-act decide → plan → execute model,
+with the approval gate on the onBOARD Promote button). When picking up new work, read §9 first.

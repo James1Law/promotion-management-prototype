@@ -2,6 +2,7 @@ import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { CrewDirectoryPage } from './pages/CrewDirectoryPage';
 import { SeafarerProfilePage } from './pages/SeafarerProfilePage';
 import { AssignmentsPage } from './pages/AssignmentsPage';
+import { OnboardCrewPage } from './pages/OnboardCrewPage';
 import { StubPage } from './pages/StubPage';
 
 /**
@@ -15,6 +16,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<CrewDirectoryPage />} />
         <Route path="/assignments" element={<AssignmentsPage />} />
+        <Route path="/onboard" element={<OnboardCrewPage />} />
         <Route path="/seafarer/:id" element={<SeafarerProfilePage />} />
         <Route path="/seafarer/:id/evaluations" element={<StubPage kind="evaluations" />} />
         <Route path="/seafarer/:id/documents" element={<StubPage kind="documents" />} />

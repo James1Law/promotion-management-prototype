@@ -1,8 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { Attachment, Rank, Seafarer } from '../../data/types';
 import { nextRanks } from '../../data/ranks';
 import { usePromotionStore } from '../../store/promotionStore';
-import { DEFAULT_APPROVAL_CHAIN } from '../../data/approvalChains';
+import { chainForTransition } from '../../data/approvalChains';
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
@@ -32,8 +32,17 @@ export function PromotionForm({
   const [remarks, setRemarks] = useState('');
   const [attachments, setAttachments] = useState<Attachment[]>([]);
 
+  // The same form instance is reused across seafarers (Crew Directory reuses it,
+  // and profile→profile navigation doesn't remount it). Reset the selection when
+  // the target options change so a stale targetCode can't break submit.
+  useEffect(() => {
+    setTargetCode(targets[0]?.code ?? '');
+  }, [targets]);
+
   const target: Rank | undefined = targets.find((r) => r.code === targetCode);
   const canSubmit = Boolean(target);
+  const chain = target ? chainForTransition(seafarer.currentRank.code, target.code) : [];
+  const needsWorkflow = chain.length > 0;
 
   const addMockAttachment = () => {
     const n = attachments.length + 1;
@@ -55,14 +64,21 @@ export function PromotionForm({
       footer={
         <>
           <span className="mr-auto text-xs text-muted">
-            Routes to {DEFAULT_APPROVAL_CHAIN.length}-step approval ·{' '}
-            {DEFAULT_APPROVAL_CHAIN.map((s) => s.department).join(' → ')}
+            {needsWorkflow ? (
+              <>
+                Routes to {chain.length}-step approval ·{' '}
+                {chain.map((s) => s.department).join(' → ')}
+              </>
+            ) : (
+              'No approval workflow for this transition · recorded directly'
+            )}
           </span>
           <Button variant="secondary" onClick={onClose}>
             Cancel
           </Button>
           <Button onClick={submit} disabled={!canSubmit}>
-            Submit for promotion <IconArrowRight width={15} height={15} />
+            {needsWorkflow ? 'Submit for promotion' : 'Record promotion'}{' '}
+            <IconArrowRight width={15} height={15} />
           </Button>
         </>
       }

@@ -25,14 +25,14 @@ export function SeafarerProfilePage() {
   const seafarer = seafarerById(id);
   const request = usePromotionStore((s) => s.requests[id]);
   const resetPromotion = usePromotionStore((s) => s.resetPromotion);
-  const applyRankChange = usePromotionStore((s) => s.applyRankChange);
+  const planPromotion = usePromotionStore((s) => s.planPromotion);
   const persona = useCurrentPersona();
 
   const [formOpen, setFormOpen] = useState(false);
   const [emailOpen, setEmailOpen] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
-  const [applyOpen, setApplyOpen] = useState(false);
-  const [effectiveDate, setEffectiveDate] = useState(new Date().toISOString().slice(0, 10));
+  const [planOpen, setPlanOpen] = useState(false);
+  const [plannedDate, setPlannedDate] = useState(new Date().toISOString().slice(0, 10));
 
   if (!seafarer) {
     return (
@@ -131,7 +131,13 @@ export function SeafarerProfilePage() {
               }
             />
             <CardBody className="space-y-5">
-              <PromotionStepper stages={request.stages} />
+              {request.stages.length > 0 ? (
+                <PromotionStepper stages={request.stages} />
+              ) : (
+                <div className="rounded-md bg-canvas px-4 py-3 text-sm text-muted">
+                  No approval workflow is configured for this transition — recorded directly.
+                </div>
+              )}
 
               {/* Contextual action / status banner */}
               {request.status === 'pending' && currentStage && (
@@ -151,15 +157,35 @@ export function SeafarerProfilePage() {
                 </div>
               )}
 
-              {request.status === 'approved' && (
+              {request.status === 'approved' && !request.plannedPromotionDate && (
                 <div className="flex flex-wrap items-center justify-between gap-3 rounded-md bg-teal-soft px-4 py-3">
                   <div className="text-sm text-ink">
-                    <strong>Approved for promotion.</strong> The rank change is a separate manual
-                    step — apply it when the timing is right.
+                    <strong>Approved for promotion.</strong> Plan it into a crew change to schedule
+                    the promotion — the Captain then completes it onBOARD.
                   </div>
-                  <Button size="sm" onClick={() => setApplyOpen(true)}>
-                    Apply rank change
+                  <Button size="sm" onClick={() => setPlanOpen(true)}>
+                    Plan into crew change
                   </Button>
+                </div>
+              )}
+
+              {request.status === 'approved' && request.plannedPromotionDate && (
+                <div className="flex flex-wrap items-center justify-between gap-3 rounded-md bg-info-soft px-4 py-3">
+                  <div className="text-sm text-ink">
+                    <strong>Planned for promotion</strong> at the crew change on{' '}
+                    {formatDate(request.plannedPromotionDate)}. The Captain completes the rank change{' '}
+                    <strong>onBOARD</strong>.
+                  </div>
+                  <div className="flex gap-2">
+                    <Button variant="secondary" size="sm" onClick={() => setPlanOpen(true)}>
+                      Change date
+                    </Button>
+                    <Link to="/onboard">
+                      <Button size="sm">
+                        View onBOARD <IconArrowRight width={14} height={14} />
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
               )}
 
@@ -239,28 +265,28 @@ export function SeafarerProfilePage() {
         />
       )}
       <Modal
-        open={applyOpen}
-        onClose={() => setApplyOpen(false)}
-        title="Apply rank change"
+        open={planOpen}
+        onClose={() => setPlanOpen(false)}
+        title="Plan into crew change"
         footer={
           <>
-            <Button variant="secondary" onClick={() => setApplyOpen(false)}>
+            <Button variant="secondary" onClick={() => setPlanOpen(false)}>
               Cancel
             </Button>
             <Button
               onClick={() => {
-                applyRankChange(seafarer.id, effectiveDate);
-                setApplyOpen(false);
+                planPromotion(seafarer.id, plannedDate);
+                setPlanOpen(false);
               }}
             >
-              Confirm promotion
+              Plan promotion
             </Button>
           </>
         }
       >
         <p className="mb-4 text-sm text-muted">
-          This records the new rank against {seafarer.name}, closing the current rank period. This is
-          the deliberate manual step after approval.
+          Schedules {seafarer.name}'s promotion into a crew-change slot. The rank does not change
+          yet — the Promote button appears onBOARD, and the Captain completes it on the day.
         </p>
         <div className="flex items-end gap-4">
           <div>
@@ -270,11 +296,11 @@ export function SeafarerProfilePage() {
             </Badge>
           </div>
           <div>
-            <FormLabel>Effective date</FormLabel>
+            <FormLabel>Promotion date</FormLabel>
             <input
               type="date"
-              value={effectiveDate}
-              onChange={(e) => setEffectiveDate(e.target.value)}
+              value={plannedDate}
+              onChange={(e) => setPlannedDate(e.target.value)}
               className="rounded-md border border-line bg-white px-3 py-2 text-sm text-ink focus:border-teal focus:outline-none"
             />
           </div>
