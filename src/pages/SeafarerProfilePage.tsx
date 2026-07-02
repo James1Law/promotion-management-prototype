@@ -149,7 +149,7 @@ export function SeafarerProfilePage() {
               {request.status === 'pending' && currentStage && (
                 <div className="flex flex-wrap items-center justify-between gap-3 rounded-md bg-info-soft px-4 py-3">
                   <div className="text-sm text-ink">
-                    Awaiting <strong>{currentStage.role}</strong> ({currentStage.approverName}).
+                    Awaiting <strong>{currentStage.role}</strong> approval.
                   </div>
                   <div className="flex gap-2">
                     <Button variant="secondary" size="sm" onClick={() => setEmailOpen(true)}>

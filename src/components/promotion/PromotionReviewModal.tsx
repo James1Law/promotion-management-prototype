@@ -79,11 +79,11 @@ export function PromotionReviewModal({
           <>
             {isCurrentApprover ? (
               <span className="mr-auto text-xs text-muted">
-                Deciding as <strong>{persona.name}</strong> · {currentStage.role}
+                Deciding as <strong>{currentStage.role}</strong>
               </span>
             ) : (
               <span className="mr-auto text-xs text-warn">
-                Awaiting {owedApprover?.name} ({currentStage.role})
+                Awaiting {currentStage.role} approval
               </span>
             )}
             <Button variant="secondary" onClick={pause} disabled={!isCurrentApprover}>
@@ -120,12 +120,12 @@ export function PromotionReviewModal({
         {request.status === 'pending' && currentStage && !isCurrentApprover && (
           <div className="flex flex-wrap items-center justify-between gap-2 rounded-md bg-warn-soft px-4 py-3 text-sm text-ink">
             <span>
-              You are viewing as <strong>{persona.name}</strong>. This step is awaiting{' '}
-              <strong>{owedApprover?.name}</strong> ({currentStage.role}).
+              You are viewing as <strong>{persona.name}</strong>. This step is awaiting the{' '}
+              <strong>{currentStage.role}</strong> group.
             </span>
             {owedApprover && (
               <Button size="sm" variant="secondary" onClick={() => setPersona(owedApprover.id)}>
-                Switch to {owedApprover.name}
+                Switch to {currentStage.role}
               </Button>
             )}
           </div>

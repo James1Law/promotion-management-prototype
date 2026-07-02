@@ -4,9 +4,10 @@ import { Button } from '../ui/Button';
 import { IconArrowRight } from '../layout/icons';
 
 /**
- * Mocked notification email sent to the current-stage approver. In production
- * this is a real email with a deep link; here the "Open promotion" button
- * navigates into the review view.
+ * Mocked notification email sent to the current-stage approver GROUP (everyone
+ * holding that role, e.g. all Marine Superintendents — not one named person). In
+ * production this is a real email with a deep link; here the "Open promotion"
+ * button navigates into the review view.
  */
 export function EmailPreview({
   seafarer,
@@ -29,7 +30,7 @@ export function EmailPreview({
       <div className="rounded-lg border border-line">
         <div className="space-y-1 border-b border-line bg-canvas px-5 py-3 text-sm">
           <div>
-            <span className="text-faint">To:</span> {current.approverName} ({current.role})
+            <span className="text-faint">To:</span> {current.role} group ({current.department})
           </div>
           <div>
             <span className="text-faint">From:</span> OpenOcean Studio · Crewing
@@ -42,7 +43,7 @@ export function EmailPreview({
           </div>
         </div>
         <div className="space-y-3 px-5 py-4 text-sm text-ink">
-          <p>Dear {current.approverName.split(' ')[0]},</p>
+          <p>Dear {current.role},</p>
           <p>
             A promotion request has been submitted for <strong>{seafarer.name}</strong> (
             {seafarer.crewNumber}) from <strong>{request.currentRank.name}</strong> to{' '}

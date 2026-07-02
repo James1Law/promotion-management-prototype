@@ -5,8 +5,10 @@ import { IconCheck, IconX, IconPause, IconSkip } from '../layout/icons';
 
 /**
  * Promotion approval stepper — mirrors the OOS crew-applicant approval stepper.
- * Renders one node per configured stage; completed nodes show role, approver
- * and decision date. Handles a variable number of stages.
+ * Renders one node per configured stage. Each stage is a ROLE/GROUP (e.g. Marine
+ * Superintendent), not a named person — the item routes to whoever holds that
+ * role — so nodes show the role + decision date, never an individual's name.
+ * Handles a variable number of stages.
  */
 
 const NODE: Record<
@@ -88,7 +90,6 @@ export function PromotionStepper({ stages }: { stages: ApprovalStageState[] }) {
                 {STATUS_LABEL[stage.status]}
               </div>
               <div className={cn('text-sm font-semibold', meta.text)}>{stage.role}</div>
-              <div className="text-xs text-muted">{stage.approverName}</div>
               {stage.decidedAt && (
                 <div className="mt-0.5 text-xs text-faint">{formatDate(stage.decidedAt)}</div>
               )}

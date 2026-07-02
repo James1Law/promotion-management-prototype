@@ -7,12 +7,15 @@ import { allApprovalStages } from './approvalChains';
  *
  * The approver personas are generated from every stage that can appear across
  * the configured chains, so the two never drift apart — add a stage in
- * approvalChains.ts and its approver appears here.
+ * approvalChains.ts and its approver group appears here.
+ *
+ * Each approver persona represents a ROLE/GROUP (e.g. "any Marine Superintendent"),
+ * not a specific individual — promotions route to whoever holds that role.
  */
 const approverPersonas: Persona[] = allApprovalStages().map((stage) => ({
   id: `approver-${stage.id}`,
-  name: stage.approverName,
-  jobTitle: stage.role,
+  name: stage.role,
+  jobTitle: `${stage.department} · approver group`,
   kind: 'approver',
   stageId: stage.id,
 }));

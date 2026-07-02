@@ -118,7 +118,9 @@ export interface ApprovalStageDef {
   id: string;
   role: string; // e.g. "Marine Superintendent"
   department: string; // e.g. "Marine"
-  approverName: string; // demo approver
+  // NB: a stage routes to a ROLE/GROUP (all users of this type), not a named
+  // person — there can be many Marine Superintendents / DPAs, so no individual
+  // is stored or shown.
 }
 
 /** Live state of an approval step within a request. */

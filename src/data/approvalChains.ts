@@ -19,24 +19,23 @@ import type { ApprovalStageDef } from './types';
  * `chainForTransition` returns, so changing the policy is a data edit here.
  */
 
-// ── The approvers (demo names) ───────────────────────────────────────────────
+// ── The approval stages (roles / groups, not named people) ───────────────────
+// A promotion is routed to a GROUP of users holding a given role (there can be
+// many Marine Superintendents, DPAs, etc.), so stages carry only role + dept.
 const SUPERINTENDENT: ApprovalStageDef = {
   id: 'marine-superintendent',
   role: 'Marine Superintendent',
   department: 'Marine',
-  approverName: 'Henk Koopman',
 };
 const DPA: ApprovalStageDef = {
   id: 'dpa',
   role: 'DPA',
   department: 'Marine / Safety',
-  approverName: 'Aisha Rahman',
 };
 const CREWING_DIRECTOR: ApprovalStageDef = {
   id: 'crewing-director',
   role: 'Crewing Director',
   department: 'Crewing',
-  approverName: 'Marie Delacroix',
 };
 
 // ── Named chains (tiers) ─────────────────────────────────────────────────────
