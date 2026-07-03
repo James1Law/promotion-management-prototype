@@ -52,3 +52,45 @@ export const IconBell = (p: SVGProps<SVGSVGElement>) => (
 export const IconThumbsUp = (p: SVGProps<SVGSVGElement>) => (
   <svg {...base(p)}><path d="M7 10v11H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1zm0 0 4.5-7a1.5 1.5 0 0 1 2.8 1l-1 5H20a2 2 0 0 1 2 2.3l-1.2 6A2 2 0 0 1 18.8 21H7" /></svg>
 );
+export const IconSearch = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" /></svg>
+);
+export const IconPlus = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}><path d="M12 5v14M5 12h14" /></svg>
+);
+export const IconHome = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}><path d="M3 10.5 12 3l9 7.5M5 9v11h14V9" /></svg>
+);
+export const IconShip = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}><path d="M3 15h18l-2 5H5zM12 3v9M6 9V6h12v3M9 3h6" /></svg>
+);
+export const IconSort = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}><path d="M8 6v12M8 6 5 9M8 6l3 3M16 18V6m0 12 3-3m-3 3-3-3" /></svg>
+);
+export const IconPlane = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}><path d="M17.8 19.2 16 11l3.5-3.5a2.1 2.1 0 0 0-3-3L13 8 4.8 6.2a.5.5 0 0 0-.5.8l3.9 4.2-2.9 2.9-1.9-.4a.5.5 0 0 0-.5.8L6 19l1.5 2.5a.5.5 0 0 0 .8-.1l.4-1.9 2.9-2.9 4.2 3.9a.5.5 0 0 0 .8-.5z" /></svg>
+);
+export const IconWarning = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01" /></svg>
+);
+export const IconFlag = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V4s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7" /></svg>
+);
+export const IconPin = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}><path d="M12 17v5M9 3h6l-1 6 3 3v2H7v-2l3-3z" /></svg>
+);
+export const IconCheckCircle = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}><circle cx="12" cy="12" r="9" /><path d="m8.5 12 2.5 2.5 4.5-5" /></svg>
+);
+export const IconClipboard = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}><rect x="6" y="4" width="12" height="17" rx="2" /><path d="M9 4V3h6v1M9 9h6M9 13h6M9 17h4" /></svg>
+);
+export const IconCalendar = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 9h18M8 3v4M16 3v4" /></svg>
+);
+export const IconDoc = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5" /></svg>
+);
+export const IconArrowLeft = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}><path d="M19 12H5M11 6l-6 6 6 6" /></svg>
+);

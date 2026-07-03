@@ -11,12 +11,13 @@ import { FormLabel } from '../components/ui/Field';
 import { Avatar } from '../components/promotion/Avatar';
 import { ProfileSummary } from '../components/promotion/ProfileSummary';
 import { ContractsPanel } from '../components/promotion/ContractsPanel';
+import { EvaluationsTab } from '../components/promotion/EvaluationsTab';
 import { PromotionStepper } from '../components/promotion/PromotionStepper';
 import { PromotionStatusBadge } from '../components/promotion/PromotionStatusBadge';
 import { PromotionForm } from '../components/promotion/PromotionForm';
 import { PromotionReviewModal } from '../components/promotion/PromotionReviewModal';
 import { EmailPreview } from '../components/promotion/EmailPreview';
-import { IconArrowRight, IconMail, IconExternal, IconPaperclip } from '../components/layout/icons';
+import { IconArrowRight, IconMail, IconPaperclip } from '../components/layout/icons';
 import { formatDate } from '../lib/format';
 
 const TABS = ['Summary', 'Personal', 'Contracts', 'Documents', 'Training', 'Evaluations', 'Remarks'];
@@ -79,13 +80,6 @@ export function SeafarerProfilePage() {
                     <span>· {seafarer.nationality}</span>
                     <span>· {seafarer.crewNumber}</span>
                   </div>
-                  <a
-                    href="#"
-                    onClick={(e) => e.preventDefault()}
-                    className="mt-1 inline-flex items-center gap-1 text-xs text-teal hover:text-teal-dark"
-                  >
-                    View crewman in Zodiac intranet <IconExternal width={12} height={12} />
-                  </a>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -94,9 +88,6 @@ export function SeafarerProfilePage() {
                     Reset demo
                   </Button>
                 )}
-                <Button onClick={() => setFormOpen(true)} disabled={!canPromote}>
-                  Promote
-                </Button>
               </div>
             </div>
           </CardBody>
@@ -253,13 +244,23 @@ export function SeafarerProfilePage() {
           <ContractsPanel seafarer={seafarer} request={request} />
         )}
 
-        {activeTab !== 'Summary' && activeTab !== 'Contracts' && (
-          <Card>
-            <CardBody className="text-sm text-muted">
-              The <strong>{activeTab}</strong> tab isn't part of this prototype.
-            </CardBody>
-          </Card>
+        {activeTab === 'Evaluations' && (
+          <EvaluationsTab
+            seafarer={seafarer}
+            onPromote={() => setFormOpen(true)}
+            canPromote={canPromote}
+          />
         )}
+
+        {activeTab !== 'Summary' &&
+          activeTab !== 'Contracts' &&
+          activeTab !== 'Evaluations' && (
+            <Card>
+              <CardBody className="text-sm text-muted">
+                The <strong>{activeTab}</strong> tab isn't part of this prototype.
+              </CardBody>
+            </Card>
+          )}
       </div>
 
       {/* Modals */}

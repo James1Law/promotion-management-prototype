@@ -33,6 +33,18 @@ export function formatServiceLength(from: string, to?: string): string {
   return `${remMonths}m ${days}d`;
 }
 
+/** Age in whole years from an ISO date of birth (blank if unknown). */
+export function ageFromDob(iso?: string): string {
+  if (!iso) return '—';
+  const dob = new Date(iso);
+  if (Number.isNaN(dob.getTime())) return '—';
+  const now = new Date();
+  let age = now.getFullYear() - dob.getFullYear();
+  const m = now.getMonth() - dob.getMonth();
+  if (m < 0 || (m === 0 && now.getDate() < dob.getDate())) age -= 1;
+  return String(age);
+}
+
 /** Format an evaluation score on the 1–10 scale, e.g. "9.2". */
 export function formatScore(score: number): string {
   return score.toFixed(1);

@@ -43,7 +43,9 @@ a config array, and the compiler guides the rest. Keep it this way.
 src/
   data/                 ← domain model + all configuration (edit here first)
     types.ts            ← single source of truth for data shapes
-    seafarers.ts        ← seed seafarers
+    seafarers.ts        ← seed seafarers (the rich, clickable crew)
+    directoryFiller.ts  ← illustrative non-clickable rows to populate Crew Directory
+    assignments.ts      ← vanity data for the Assignments board (one Promote wired per row)
     ranks.ts            ← rank ladder + progression (drives target-rank options)
     vessels.ts          ← vessel catalogue (planned-vessel dropdown for at-home crew)
     approvalChains.ts   ← approval workflow, resolved PER TRANSITION — CHANGE THE WORKFLOW HERE
@@ -58,7 +60,9 @@ src/
     promotion/          ← promotion-specific, reused across screens:
                           PromotionForm, PromotionReviewModal, PromotionStepper,
                           ProfileSummary, ContractsPanel, ExperiencePanel,
-                          EvaluationsPanel, LicencesPanel, EmailPreview, …
+                          EvaluationsPanel (review-modal list), EvaluationsTab
+                          (product-like profile tab, hosts Promote),
+                          LicencesPanel, EmailPreview, …
   pages/                ← one file per route (CrewDirectory, SeafarerProfile,
                           Assignments, OnboardCrew [the simulated onBOARD vessel
                           view — where a promotion is executed], StubPage)
@@ -86,10 +90,22 @@ kept for utility-class compatibility); the navy is the chrome colour (sidebar + 
   shown as `9.2 / 10` with a qualitative label. Bands and formatting live in `lib/format.ts`
   (`formatScore`, `scoreLabel`, `scoreTone`); seed values are on `Evaluation.score`.
 - **Add a seafarer** → append to `SEAFARERS` in `seafarers.ts` (now requires `onboard`
-  + a `contracts` timeline; set `onboard: false` for an at-home seafarer).
+  + a `contracts` timeline; set `onboard: false` for an at-home seafarer). These render as
+  the **clickable** rows at the top of the Crew Directory.
+- **Add / edit illustrative directory rows** (the non-clickable crew that make the directory
+  feel populated) → edit `FILLER_CREW` in `data/directoryFiller.ts`. They have no profile
+  behind them; the shared `DirectoryRow` shape + `seafarerToRow` keep both kinds rendering
+  the same columns.
 - **Add a rank transition** → extend `RANKS` / `PROGRESSION` in `ranks.ts`.
-- **Add an entry point** → render `<PromotionForm seafarer=… />` behind a button;
-  every entry point opens the same form by design (see PRD §4.1).
+- **Move / add a promotion entry point** → the live entry points are the **Promote** button in
+  the profile's Evaluations tab (`components/promotion/EvaluationsTab`) and the **Promote**
+  button in an expanded Assignments-board row (`pages/AssignmentsPage`). Both call `onPromote`
+  → open the shared `PromotionForm`. Any new entry point should open the same form
+  (see PRD §4.1 / §9 evolutions 7–8).
+- **Edit the Assignments board** (vessels, outgoing/incoming crew, gap/overlap, month
+  separators) → edit `ASSIGNMENT_GROUPS` in `data/assignments.ts`. It's vanity data; set a
+  row's `seafarerId` to a `SEAFARERS` id to wire that row's expanded **Promote** button to a
+  real promotion. Rows without a `seafarerId` show a disabled Promote (still non-clickable).
 - **Re-skin** → edit the tokens in `src/index.css`.
 
 ## Conventions
@@ -99,6 +115,12 @@ kept for utility-class compatibility); the navy is the chrome colour (sidebar + 
   (experience / evaluations / licences) appear **only** in those modals — the profile
   Summary tab (`ProfileSummary`) shows the workflow card plus normal crew summary, never
   the decision-support panels.
+- The profile has three **live** tabs — Summary, Contracts, Evaluations — the rest are
+  stubs. **Promote is initiated from the Evaluations tab** (`EvaluationsTab`), not the
+  directory or the profile header, to match the real product. That tab also renders a
+  decorative **Ready for promotion** button (intentionally non-functional). Note
+  `EvaluationsTab` (the product-like profile tab) is distinct from `EvaluationsPanel` (the
+  compact decision-support list inside the review modal).
 - OOS chrome is navy (`bg-navy`, sidebar + top bar); all primary calls-to-action use the
   action-blue token (`bg-teal`, see `src/index.css`).
 - Prototype-only affordances (the persona switcher, "Reset demo", the "Prototype"

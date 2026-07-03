@@ -119,9 +119,11 @@ Repo: <https://github.com/James1Law/promotion-management-prototype> (static SPA,
 
 | Area | State | Where |
 |---|---|---|
-| Crew Directory list + two seed seafarers (tanker officer, container engineer) | ✅ | `pages/CrewDirectoryPage`, `data/seafarers.ts` |
+| Crew Directory styled like the live product (search/sort/filter chrome, coloured avatars, MA/status/DOB/age columns, availability chips) — 5 clickable seed profiles + an illustrative non-clickable filler roster | ✅ | `pages/CrewDirectoryPage`, `data/seafarers.ts`, `data/directoryFiller.ts` |
+| Live **Evaluations tab** (Onboard/Others/Personal-objectives sub-tabs, flagged filter, appraisal rows joined to service periods) — **hosts the Promote entry point** | ✅ | `components/promotion/EvaluationsTab`, `SeafarerProfilePage` |
 | Promotion **form** (pre-populated: experience, evaluations, licences, remarks, attachment) | ✅ | `components/promotion/PromotionForm` |
-| Unified entry points (Crew Directory + Assignments both open the same form) | ✅ | `pages/CrewDirectoryPage`, `pages/AssignmentsPage` |
+| **Assignments board** styled like the live product (vessel groups, outgoing/incoming crew, Gap/Overlap, month separators, expandable rows) — the **Promote** button in an expanded row is the second entry point | ✅ | `pages/AssignmentsPage`, `data/assignments.ts` |
+| Unified entry points (Evaluations-tab **Promote** + Assignments-board **Promote** both open the same form) | ✅ | `components/promotion/EvaluationsTab`, `pages/AssignmentsPage` |
 | Vessel-type-conditional experience rows (tankers/containers/bulk) | ✅ | `data/formConfig.ts` (`EXPERIENCE_ROWS`, `showIf`) |
 | Per-transition approval workflow (full / single-step / none), approve / reject / pause / skip | ✅ | `data/approvalChains.ts`, `store/promotionStore.ts` |
 | Applicant-style **stepper** on the profile (line centred on nodes) | ✅ | `components/promotion/PromotionStepper` |
@@ -173,6 +175,24 @@ These were agreed in review sessions after the initial spec and are the current 
    first of the "usual requirements" Sophie asked us to capture; the fuller criteria set
    (recommendations count, specific certificates, HSQE/medical flags, sea-time by vessel
    type) is documented below and deferred to a later pass.
+7. **The Promote entry point moved into the Evaluations tab, to match the real product.**
+   Previously a `Promote` button sat on every Crew Directory row and on the profile header —
+   convenient for the demo but unlike OOS. It now lives only in the footer of the profile's
+   **Evaluations tab** (`EvaluationsTab`), alongside a decorative **Ready for promotion**
+   button (non-functional in the prototype, mirroring the product). The Crew Directory itself
+   was rebuilt to look like the live product (see the delivered table): the first 5 rows are
+   the rich, clickable seed profiles; the rest are an illustrative filler roster
+   (`data/directoryFiller.ts`) with no profile behind them. The Summary tab still carries the
+   promotion-approval card once a request exists; the Evaluations tab just *initiates* it.
+   *(supersedes the "keep existing entry points" framing in §4.1 for where Promote lives)*
+8. **The Assignments screen was rebuilt to mirror the real OOS board.** It now shows crew
+   grouped by vessel/position, with the outgoing crewman on the left, the incoming (or
+   "Crewman not assigned") successor on the right, a Gap/Overlap indicator between them, month
+   separators, and expandable rows. It is presentational (`data/assignments.ts` is vanity
+   data) except the **Promote** button revealed when an unassigned row is expanded, which
+   opens the shared `PromotionForm` for the row's linked seed seafarer — proving the second
+   entry point. A decorative **Assign** / **Sign off** button sit alongside it. *(refines the
+   §4.1 Assignments entry point)*
 
 ### The OOS ↔ onBOARD interaction (built)
 
