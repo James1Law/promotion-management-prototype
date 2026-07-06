@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import { Fragment } from 'react';
-import { seafarerById } from '../data/seafarers';
 import {
   ASSIGNMENT_GROUPS,
   ASSIGNMENT_FILTERS,
   type AssignmentGroup,
   type AssignmentRow,
   type IncomingCrew,
+  type PromoteCandidate,
 } from '../data/assignments';
 import type { PromotionRequest, Seafarer } from '../data/types';
 import { usePromotionStore } from '../store/promotionStore';
 import { Shell } from '../components/layout/Shell';
 import { Button } from '../components/ui/Button';
 import { PromotionForm } from '../components/promotion/PromotionForm';
+import { PromoteCrewmanModal } from '../components/promotion/PromoteCrewmanModal';
 import { PromotionStatusBadge } from '../components/promotion/PromotionStatusBadge';
 import {
   IconChevron,
@@ -37,6 +38,8 @@ import { cn } from '../lib/cn';
  * shared PromotionForm (see data/assignments.ts).
  */
 export function AssignmentsPage() {
+  // Two-step flow: Promote opens the crew picker; picking a candidate opens the form.
+  const [pickerCandidates, setPickerCandidates] = useState<PromoteCandidate[] | null>(null);
   const [formFor, setFormFor] = useState<Seafarer | null>(null);
 
   const totalRows = ASSIGNMENT_GROUPS.reduce((n, g) => n + g.rows.length, 0);
@@ -81,11 +84,22 @@ export function AssignmentsPage() {
 
         <div className="overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface">
           {ASSIGNMENT_GROUPS.map((group) => (
-            <GroupBlock key={group.id} group={group} onPromote={setFormFor} />
+            <GroupBlock key={group.id} group={group} onPromote={setPickerCandidates} />
           ))}
         </div>
       </div>
 
+      {pickerCandidates && (
+        <PromoteCrewmanModal
+          candidates={pickerCandidates}
+          open
+          onClose={() => setPickerCandidates(null)}
+          onSelect={(s) => {
+            setPickerCandidates(null);
+            setFormFor(s);
+          }}
+        />
+      )}
       {formFor && <PromotionForm seafarer={formFor} open onClose={() => setFormFor(null)} />}
     </Shell>
   );
@@ -96,7 +110,7 @@ function GroupBlock({
   onPromote,
 }: {
   group: AssignmentGroup;
-  onPromote: (s: Seafarer) => void;
+  onPromote: (candidates: PromoteCandidate[]) => void;
 }) {
   return (
     <>
@@ -131,7 +145,13 @@ function GroupBlock({
   );
 }
 
-function Row({ row, onPromote }: { row: AssignmentRow; onPromote: (s: Seafarer) => void }) {
+function Row({
+  row,
+  onPromote,
+}: {
+  row: AssignmentRow;
+  onPromote: (candidates: PromoteCandidate[]) => void;
+}) {
   const [open, setOpen] = useState(false);
   const request = usePromotionStore((s) => (row.seafarerId ? s.requests[row.seafarerId] : undefined));
   const overlap = row.gap === 'Overlap';
@@ -224,11 +244,17 @@ function ExpandedDetail({
 }: {
   row: AssignmentRow;
   request: PromotionRequest | undefined;
-  onPromote: (s: Seafarer) => void;
+  onPromote: (candidates: PromoteCandidate[]) => void;
 }) {
-  const seafarer = row.seafarerId ? seafarerById(row.seafarerId) : undefined;
+  // Candidates offered in the picker — explicit list, or the single primary seafarer.
+  const candidates: PromoteCandidate[] =
+    row.candidates ??
+    (row.seafarerId
+      ? [{ seafarerId: row.seafarerId, endOfContract: row.outgoing.endOfContract }]
+      : []);
   const canPromote =
-    !!seafarer && (!request || request.status === 'promoted' || request.status === 'rejected');
+    candidates.length > 0 &&
+    (!request || request.status === 'promoted' || request.status === 'rejected');
 
   return (
     <div className="flex items-stretch border-t border-line bg-white">
@@ -303,9 +329,9 @@ function ExpandedDetail({
               <Button
                 variant="secondary"
                 size="sm"
-                onClick={() => seafarer && onPromote(seafarer)}
+                onClick={() => candidates.length > 0 && onPromote(candidates)}
                 disabled={!canPromote}
-                title={seafarer ? undefined : 'No promotion candidate in this prototype'}
+                title={candidates.length > 0 ? undefined : 'No promotion candidate in this prototype'}
               >
                 Promote
               </Button>

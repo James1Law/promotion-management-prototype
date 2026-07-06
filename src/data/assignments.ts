@@ -46,10 +46,28 @@ export interface IncomingCrew {
   checks?: ('ok' | 'clipboard' | 'travel' | 'warning' | 'flag')[];
 }
 
+/**
+ * A crew member offered in the "Promote crewman" picker for a row. Clicking
+ * Promote lists these candidates; picking one (Continue) opens the shared
+ * PromotionForm for that seafarer. `endOfContract` is a display-only date.
+ */
+export interface PromoteCandidate {
+  seafarerId: string;
+  endOfContract: string; // display date, e.g. "28 Jun 2026"
+}
+
 export interface AssignmentRow {
   id: string;
-  /** When set, the expanded row's Promote button opens this seafarer's form. */
+  /**
+   * The row's primary promotion candidate. Its request status drives the row's
+   * status badge and the Promote button's enabled/disabled state.
+   */
   seafarerId?: string;
+  /**
+   * Crew offered in the "Promote crewman" picker. When omitted, the picker
+   * shows the single `seafarerId` candidate. First entry should be the primary.
+   */
+  candidates?: PromoteCandidate[];
   outgoing: OutgoingCrew;
   gap: 'Gap' | 'Overlap';
   overlapNote?: string; // e.g. "Overlap in progress"
@@ -114,6 +132,10 @@ export const ASSIGNMENT_GROUPS: AssignmentGroup[] = [
       {
         id: 'r-nordic-star-1',
         seafarerId: 'sf-halvorsen',
+        candidates: [
+          { seafarerId: 'sf-halvorsen', endOfContract: '28 Jun 2026' },
+          { seafarerId: 'sf-okafor', endOfContract: '20 Jul 2026' },
+        ],
         outgoing: {
           name: 'HALVORSEN, MARCUS',
           crewNumber: '104882',
@@ -169,6 +191,10 @@ export const ASSIGNMENT_GROUPS: AssignmentGroup[] = [
       {
         id: 'r-pacific-1',
         seafarerId: 'sf-menon',
+        candidates: [
+          { seafarerId: 'sf-menon', endOfContract: '12 Jul 2026' },
+          { seafarerId: 'sf-marchetti', endOfContract: '09 Aug 2026' },
+        ],
         outgoing: {
           name: 'MENON, RAJESH',
           crewNumber: '103551',
@@ -186,6 +212,10 @@ export const ASSIGNMENT_GROUPS: AssignmentGroup[] = [
       {
         id: 'r-pacific-2',
         seafarerId: 'sf-okafor',
+        candidates: [
+          { seafarerId: 'sf-okafor', endOfContract: '20 Jul 2026' },
+          { seafarerId: 'sf-halvorsen', endOfContract: '28 Jun 2026' },
+        ],
         outgoing: {
           name: 'OKAFOR, CHIDI',
           crewNumber: '105774',
